@@ -51,7 +51,7 @@
                 <a class="nav-link" href="index.html">Resume</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="index.html">Projects</a>
+                <a class="nav-link" href="project.html">Projects</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="index.html">Contact Us</a>
@@ -62,86 +62,79 @@
       </nav>
       <section>
         <div class="container">
-          <h2 class="text-center my-4">Projects</h2>
           <div class="row">
-            <div class="col-lg-3">
-              <div class="card mb-3">
-                <div class="card-header">
-                  <h4>Card 1</h4>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12 col-md-9 section-divider">
-                      <h6>A</h6>
-                      <p>Section A content goes here.</p>
-                    </div>
-                    <div class="col-12 col-md-3">
-                      <h6>B</h6>
-                      <p>Section B content goes here.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="card mb-3">
-                <div class="card-header">
-                  <h4>Card 2</h4>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12 col-md-9 section-divider">
-                      <h6>A</h6>
-                      <p>Section A content goes here.</p>
-                    </div>
-                    <div class="col-12 col-md-3">
-                      <h6>B</h6>
-                      <p>Section B content goes here.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="card mb-3">
-                <div class="card-header">
-                  <h4>Card 3</h4>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12 col-md-9 section-divider">
-                      <h6>A</h6>
-                      <p>Section A content goes here.</p>
-                    </div>
-                    <div class="col-12 col-md-3">
-                      <h6>B</h6>
-                      <p>Section B content goes here.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="card mb-3">
-                <div class="card-header">
-                  <h4>Card 4</h4>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12 col-md-9 section-divider">
-                      <h6>A</h6>
-                      <p>Section A content goes here.</p>
-                    </div>
-                    <div class="col-12 col-md-3">
-                      <h6>B</h6>
-                      <p>Section B content goes here.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="col">
+              <h1 class="text-center mb-4 gradient-headline">Projects</h1>
             </div>
           </div>
+          <div class="row" id="card-row">
+            <!-- Cards will be dynamically added here -->
+          </div>
         </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+          $(document).ready(function () {
+            var apiUrl = "https://dummyjson.com/products"; // API endpoint for dummy data
+
+            // Fetch the dummy data from the API
+            $.ajax({
+              url: apiUrl,
+              method: "GET",
+              dataType: "json",
+              success: function (data) {
+                var cardsData = JSON.parse(data); // Parse the JSON response
+                cardData = cardsData.products;
+
+                // Loop through the cards data and create the cards
+                $.each(cardsData, function (index, cardData) {
+                  var cardHtml =
+                    '<div class="col-6 col-md-4 col-lg-3">' +
+                    '<div class="card max-width-card mb-3">' +
+                    '<div class="card-body">' +
+                    '<h5 class="card-title">' +
+                    cardData.title +
+                    "</h5>" +
+                    '<p class="card-text">' +
+                    cardData.description +
+                    "</p>" +
+                    '<img src="' +
+                    cardData.image +
+                    '" class="card-img-top" alt="Card Image">' +
+                    "</div>" +
+                    "</div>" +
+                    "</div>";
+
+                  // Append the card HTML to the card-row
+                  $("#card-row").append(cardHtml);
+                });
+
+                animateCards(); // Trigger the animation after populating the cards
+              },
+              error: function () {
+                console.log("Failed to fetch data from the API");
+              },
+            });
+
+            // Animation function
+            function animateCards() {
+              var delay = 0.2; // Initial delay in seconds
+              var increment = 0.2; // Increment for each card
+
+              // Select all cards within the card-row
+              var cards = $("#card-row .card");
+
+              cards.each(function (index) {
+                var card = $(this);
+                setTimeout(function () {
+                  card.css("opacity", "1");
+                }, delay * 1000); // Delay in milliseconds
+
+                delay += increment;
+              });
+            }
+          });
+        </script>
       </section>
     </main>
     <!-- Footer -->
