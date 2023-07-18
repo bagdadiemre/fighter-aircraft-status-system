@@ -88,12 +88,10 @@
                 // Loop through the cards data and create the cards
                 $.each(cardsData, function (index, cardData) {
                   var cardHtml =
+                    '<div class="col-12">' +
                     '<div class="card max-width-card mb-3">' +
-                    '<div class="card-img-container">' +
-                    '<img src="' +
-                    cardData.thumbnail +
-                    '" class="card-img-top" alt="Product Image">' +
-                    "</div>" +
+                    '<div class="row no-gutters">' +
+                    '<div class="col-9">' +
                     '<div class="card-body">' +
                     '<h5 class="card-title">' +
                     cardData.title +
@@ -104,6 +102,16 @@
                     '<p class="card-text">Price: $' +
                     cardData.price +
                     "</p>" +
+                    "</div>" +
+                    "</div>" +
+                    '<div class="col-3">' +
+                    '<div class="card-img-container">' +
+                    '<img src="' +
+                    cardData.thumbnail +
+                    '" class="card-img" alt="Product Image">' +
+                    "</div>" +
+                    "</div>" +
+                    "</div>" +
                     "</div>" +
                     "</div>";
 
@@ -120,8 +128,8 @@
 
             // Animation function
             function animateCards() {
-              var delay = 0.2; // Initial delay in seconds
-              var increment = 0.2; // Increment for each card
+              var delay = 0; // Initial delay in seconds
+              var increment = 0.4; // Increment for each card
 
               // Select all cards within the card-row
               var cards = $("#card-row .card");
@@ -129,7 +137,13 @@
               cards.each(function (index) {
                 var card = $(this);
                 setTimeout(function () {
-                  card.css("opacity", "1");
+                  card.animate(
+                    {
+                      opacity: 1,
+                      transform: "translateY(0)",
+                    },
+                    800
+                  ); // Animation duration in milliseconds
                 }, delay * 1000); // Delay in milliseconds
 
                 delay += increment;
