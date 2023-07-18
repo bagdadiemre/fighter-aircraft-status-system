@@ -75,7 +75,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
           $(document).ready(function () {
-            var apiUrl = "https://dummyjson.com/products"; // API endpoint for dummy data
+            var apiUrl = "https://dummyjson.com/products?limit=10"; // API endpoint for dummy data
 
             // Fetch the dummy data from the API
             $.ajax({
@@ -83,14 +83,17 @@
               method: "GET",
               dataType: "json",
               success: function (data) {
-                var cardsData = JSON.parse(data); // Parse the JSON response
-                cardData = cardsData.products;
+                var cardsData = data.products; // Get the products array from the JSON response
 
                 // Loop through the cards data and create the cards
                 $.each(cardsData, function (index, cardData) {
                   var cardHtml =
-                    '<div class="col-6 col-md-4 col-lg-3">' +
                     '<div class="card max-width-card mb-3">' +
+                    '<div class="card-img-container">' +
+                    '<img src="' +
+                    cardData.thumbnail +
+                    '" class="card-img-top" alt="Product Image">' +
+                    "</div>" +
                     '<div class="card-body">' +
                     '<h5 class="card-title">' +
                     cardData.title +
@@ -98,10 +101,9 @@
                     '<p class="card-text">' +
                     cardData.description +
                     "</p>" +
-                    '<img src="' +
-                    cardData.image +
-                    '" class="card-img-top" alt="Card Image">' +
-                    "</div>" +
+                    '<p class="card-text">Price: $' +
+                    cardData.price +
+                    "</p>" +
                     "</div>" +
                     "</div>";
 

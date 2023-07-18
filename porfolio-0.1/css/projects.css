@@ -27,7 +27,7 @@
 
 .card {
   opacity: 0;
-  animation: fadeIn 0.6s ease-in-out forwards;
+  transform: translateY(50px);
 }
 
 @keyframes fadeIn {
