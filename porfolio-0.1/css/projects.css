@@ -1,0 +1,9 @@
+.section-divider {
+  border-right: 1px solid #ddd;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin-bottom: 10px;
+}
