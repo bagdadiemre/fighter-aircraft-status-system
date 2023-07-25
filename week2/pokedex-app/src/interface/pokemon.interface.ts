@@ -10,3 +10,9 @@ export default interface PokemonListResponse {
   results: IndexedPokemon[];
 }
  
+export default interface ListPokemon {
+  name: string
+  url: string
+  image: string
+  pokedexNumber: string
+}
