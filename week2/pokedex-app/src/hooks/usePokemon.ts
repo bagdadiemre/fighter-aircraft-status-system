@@ -37,7 +37,7 @@ const usePokemons = () => {
         const listPokemons = result.data.results.map((p) =>
           indexedPokemonToListPokemon(p)
         );
-        setPokemons(listPokemons);
+        setPokemons([...pokemons, ...listPokemons]);
         setNextUrl(result.data.next);
       }
     }
