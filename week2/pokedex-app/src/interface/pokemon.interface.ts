@@ -4,10 +4,10 @@ export default interface IndexedPokemon {
 }
 
 export default interface PokemonListResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: IndexedPokemon[];
+  count?: number;
+  next?: string | null;
+  previous?: string | null;
+  results?: IndexedPokemon[];
 }
 
 export default interface ListPokemon {

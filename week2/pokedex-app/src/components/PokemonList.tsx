@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
 import { PokemonCard } from ".";
-import { IndexedPokemon } from "../interface";
+import { ListPokemon } from "../interface";
 
 interface PokemonListProps {
-  pokemons: IndexedPokemon[];
+  pokemons: ListPokemon[];
   children: React.ReactNode;
 }
 
@@ -13,7 +13,7 @@ const PokemonList = ({ pokemons }: PokemonListProps) => {
       {pokemons.length > 0
         ? pokemons.map((p) => {
             return (
-              <Grid item xs={4}>
+              <Grid item xs={4} key={p.name}>
                 <PokemonCard key={p.name} pokemon={p}></PokemonCard>
               </Grid>
             );
