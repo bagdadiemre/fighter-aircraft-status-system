@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IndexedPokemon,
   PokemonListResponse,
@@ -12,10 +12,16 @@ const usePokemons = () => {
     POKEMON_API_POKEMON_URL
   );
 
+  useEffect(() => {
+    fetchPokemon();
+  }, []);
+
   const fetchPokemon = async () => {
     if (nextUrl) {
       const result = await httpCliet.get<PokemonListResponse>(nextUrl);
-      console.log(result);
+      if (result?.data?.results) {
+        setPokemons(result.data.results);
+      }
     }
   };
 
