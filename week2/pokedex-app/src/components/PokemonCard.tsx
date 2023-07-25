@@ -1,3 +1,5 @@
+import { Box, Card, CardContent, Typography } from "@mui/material";
+
 import { IndexedPokemon } from "../interface";
 
 interface PokemonCardProps {
@@ -5,7 +7,15 @@ interface PokemonCardProps {
 }
 
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
-  return <div>{pokemon.name}</div>;
+  return (
+    <Card>
+      <CardContent>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Typography>{pokemon.name}</Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default PokemonCard;
