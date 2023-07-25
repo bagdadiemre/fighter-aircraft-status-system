@@ -2,6 +2,7 @@ import { IndexedPokemon } from "../interface/pokemon.interface";
 
 interface PokemonListProps {
   pokemons: IndexedPokemon[];
+  children: React.ReactNode;
 }
 
 const PokemonList = ({ pokemons }: PokemonListProps) => {
