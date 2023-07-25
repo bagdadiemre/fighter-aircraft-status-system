@@ -4,7 +4,6 @@ import { ListPokemon } from "../interface";
 
 interface PokemonListProps {
   pokemons: ListPokemon[];
-  children: React.ReactNode;
 }
 
 const PokemonList = ({ pokemons }: PokemonListProps) => {

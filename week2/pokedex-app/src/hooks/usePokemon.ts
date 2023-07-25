@@ -5,7 +5,7 @@ import { POKEMON_API_POKEMON_URL, POKEMON_IMAGES_BASE_URL } from "../constants";
 
 const usePokemons = () => {
   const [pokemons, setPokemons] = useState<ListPokemon[]>([]);
-  const [nextUrl, setNextUrl] = useState<string | null>(
+  const [nextUrl, setNextUrl] = useState<string | null | undefined>(
     POKEMON_API_POKEMON_URL
   );
 
@@ -38,12 +38,15 @@ const usePokemons = () => {
           indexedPokemonToListPokemon(p)
         );
         setPokemons(listPokemons);
+        setNextUrl(result.data.next);
       }
     }
   };
 
   return {
     pokemons,
+    fetchNextPage: fetchPokemon,
+    hasMorePokemon: !!nextUrl,
   };
 };
 
