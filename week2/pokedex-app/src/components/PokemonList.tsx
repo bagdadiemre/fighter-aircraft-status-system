@@ -1,5 +1,5 @@
+import { PokemonCard } from ".";
 import { IndexedPokemon } from "../interface";
-
 
 interface PokemonListProps {
   pokemons: IndexedPokemon[];
@@ -11,7 +11,7 @@ const PokemonList = ({ pokemons }: PokemonListProps) => {
     <>
       {pokemons.length > 0
         ? pokemons.map((p) => {
-            return <div key={p.name}> {p.name} </div>;
+            return <PokemonCard key={p.name} pokemon={p}></PokemonCard>;
           })
         : null}
     </>

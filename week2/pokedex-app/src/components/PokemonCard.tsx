@@ -4,8 +4,8 @@ interface PokemonCardProps {
   pokemon: IndexedPokemon;
 }
 
-const PokemonCard = () => {
-  return <div>PokemonCard</div>;
+const PokemonCard = ({ pokemon }: PokemonCardProps) => {
+  return <div>{pokemon.name}</div>;
 };
 
 export default PokemonCard;
