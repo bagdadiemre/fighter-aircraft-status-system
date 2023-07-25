@@ -1,3 +1,3 @@
 import axios from "axios";
 
-export const httpCliet = axios.create();
+export const httpClient = axios.create();

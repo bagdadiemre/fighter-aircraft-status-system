@@ -1,9 +1,9 @@
-export interface IndexedPokemon {
+export default interface IndexedPokemon {
   name: string;
   url: string;
 }
 
-export interface PokemonListResponse {
+export default interface PokemonListResponse {
   count: number;
   next: string | null;
   previous: string | null;

@@ -1,4 +1,5 @@
-import { IndexedPokemon } from "../interface/pokemon.interface";
+import { IndexedPokemon } from "../interface";
+
 
 interface PokemonListProps {
   pokemons: IndexedPokemon[];
