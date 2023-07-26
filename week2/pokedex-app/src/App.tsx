@@ -3,7 +3,7 @@ import theme from "./theme";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home } from "./pages";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { PokemonDeatil } from ".";
+import { PokemonDetail } from ".";
 
 const router = createBrowserRouter([
   {
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
   },
   {
     path: "pokemon/:pokemonName",
-    element: <PokemonDeatil />,
+    element: <PokemonDetail />,
   },
 ]);
 

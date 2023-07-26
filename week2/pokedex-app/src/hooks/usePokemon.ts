@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DetailPokemon } from "../interface";
 import { httpClient } from "../api";
 import { POKEMON_API_POKEMON_URL } from "../constants";
