@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Container, Grid, Box } from "@mui/material";
 import { usePokemon } from "../hooks";
-import { PokemonAvatar } from ".";
+import { PokemonAvatar, PokemonBasicInfo } from ".";
 
 const PokemonDetail = () => {
   const { pokemonName } = useParams();
@@ -30,6 +30,9 @@ const PokemonDetail = () => {
             <>
               <Grid item xs={12} sm={6}>
                 <PokemonAvatar pokemon={pokemon} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <PokemonBasicInfo pokemon={pokemon} />
               </Grid>
             </>
           ) : (
