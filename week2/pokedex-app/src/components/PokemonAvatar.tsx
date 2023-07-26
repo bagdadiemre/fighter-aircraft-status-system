@@ -7,11 +7,12 @@ interface PokemonAvatarProps {
 
 const PokemonAvatar = ({ pokemon }: PokemonAvatarProps) => {
   return (
-    <Card sx={{ backgroundColor: "green" }}>
+    <Card sx={{ backgroundColor: " #f2f2f2" }}>
       <CardContent>
         <CardMedia
           component="img"
           sx={{ height: 100, objectFit: "contain" }}
+          image={pokemon.sprites.other["official-artwork"].front_default}
           title={pokemon.name}
         />
       </CardContent>

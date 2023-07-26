@@ -1,16 +1,16 @@
-export default interface IndexedPokemon {
+export interface IndexedPokemon {
   name: string;
   url: string;
 }
 
-export default interface PokemonListResponse {
+export interface PokemonListResponse {
   count?: number;
   next?: string | null;
   previous?: string | null;
   results?: IndexedPokemon[];
 }
 
-export default interface ListPokemon {
+export interface ListPokemon {
   name: string;
   url: string;
   image: string;
