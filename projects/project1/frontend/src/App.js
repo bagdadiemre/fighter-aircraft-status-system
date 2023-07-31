@@ -1,11 +1,22 @@
-import './App.css';
+import React from "react";
+import AuthProvider from "./contexts/AuthProvider";
+import LoginForm from "./components/Auth/LoginForm";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      
-    </div>
+    <AuthProvider>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <LoginForm />
+      </div>
+    </AuthProvider>
   );
-}
+};
 
 export default App;
