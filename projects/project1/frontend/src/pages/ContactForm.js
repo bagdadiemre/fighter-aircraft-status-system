@@ -7,11 +7,12 @@ import {
   Grid,
   Box,
 } from "@mui/material";
-import NameField from "../components/ContactForm/NameField";
-import MessageField from "../components/ContactForm/MessageField";
-import CountrySelect from "../components/ContactForm/CountrySelect";
-import GenderRadioGroup from "../components/ContactForm/GenderRadioGroup";
-import SnackbarMessage from "../components/ContactForm/SnackbarMessage";
+import { NameField } from "../components/ContactForm";
+import { MessageField } from "../components/ContactForm";
+import { CountrySelect } from "../components/ContactForm";
+import { GenderRadioGroup } from "../components/ContactForm";
+import { SnackbarMessage } from "../components/ContactForm";
+
 import { addNewMessage, getCountries } from "../api/api";
 
 const ContactForm = () => {
