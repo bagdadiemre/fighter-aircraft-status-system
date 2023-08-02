@@ -12,7 +12,6 @@ import { MessageField } from "../components/ContactFormPage";
 import { CountrySelect } from "../components/ContactFormPage";
 import { GenderRadioGroup } from "../components/ContactFormPage";
 import { SnackbarMessage } from "../components/ContactFormPage";
-
 import { addNewMessage, getCountries } from "../services/api";
 
 const ContactForm = () => {

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { checkLogin, logout } from "../services/api";
-
+import { checkLogin } from "../services/api";
+import { useAuth } from "../services/AuthContext";
 import {
   Container,
   CssBaseline,
@@ -11,28 +11,25 @@ import {
 } from "@mui/material";
 
 const HomePage = () => {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const { isLoggedIn, user, updateUser, handleLogout } = useAuth();
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+
     const token = localStorage.getItem("token");
     checkLogin(token)
-      .then((data) => setUser(data.data.user))
-      .catch(() => navigate("/login")); 
-  }, [navigate]);
-
-  const handleLogout = async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        await logout(token);
-      } catch (error) {
-        console.log(error); // Handle logout error
-      }
-      localStorage.removeItem("token");
-      navigate("/login"); // Use navigate to redirect
-    }
-  };
+      .then((data) => {
+        updateUser(data.data.user); // Update user state
+      })
+      .catch(() => {
+        handleLogout();
+        navigate("/login");
+      });
+  }, [isLoggedIn, navigate, updateUser, handleLogout]);
 
   const isAdmin = user?.role === "admin";
   const isReader = user?.role === "reader";

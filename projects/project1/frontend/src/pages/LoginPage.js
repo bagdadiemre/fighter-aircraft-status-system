@@ -1,44 +1,40 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleLogin } from "../services/auth"; // Import handleLogin from auth module
+import { useAuth } from "../services/AuthContext";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
+  const handleLogin = async () => {
     try {
-      await handleLogin(username, password);
-      navigate("/homepage");
+      const data = await login(username, password);
+      console.log("Login successful:", data);
+      // Redirect logic here based on user role (admin/reader)
+      navigate(data.data.user.role === "admin" ? "/admin" : "/reader");
     } catch (error) {
-      setError(error);
+      console.error("Login failed:", error);
     }
   };
 
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-        {error && <p className="error">{error}</p>}
-      </form>
+    <div>
+      <h2>Login</h2>
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 };
