@@ -1,4 +1,6 @@
-import { login } from "./api";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { checkLogin, logout, login } from "./api";
 
 export const handleLogin = async (username, password) => {
   try {
@@ -10,3 +12,5 @@ export const handleLogin = async (username, password) => {
     throw error.error;
   }
 };
+
+

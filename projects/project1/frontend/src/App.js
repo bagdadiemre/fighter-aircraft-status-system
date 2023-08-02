@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { checkLogin } from "./services/api";
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,8 +18,27 @@ import {
 } from "./pages";
 
 const App = () => {
-  const isLoggedIn = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      checkLogin(token)
+        .then((data) => {
+          setIsLoggedIn(true);
+          setUserRole(data.data.user.role);
+        })
+        .catch(() => {
+          setIsLoggedIn(false);
+          setUserRole(null);
+        });
+    } else {
+      setIsLoggedIn(false);
+      setUserRole(null);
+    }
+    console.log("isLoggedIn", isLoggedIn);
+  }, [isLoggedIn]);
 
   return (
     <Router>
@@ -29,10 +49,10 @@ const App = () => {
         {isLoggedIn && (
           <>
             <Route path="/homepage" element={<HomePage />} />
-            {/* <Route
+            <Route
               path="/login"
               element={<Navigate to="/homepage" replace />}
-            /> {// isLoggedIni halledince gel buraya logout yaptigini anlamiyor} */}
+            />
             <Route path="/messages" element={<MessagesPage />} />
             <Route
               path="/users"

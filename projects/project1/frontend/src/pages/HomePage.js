@@ -12,13 +12,13 @@ import {
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     checkLogin(token)
       .then((data) => setUser(data.data.user))
-      .catch(() => navigate("/login"));
+      .catch(() => navigate("/login")); 
   }, [navigate]);
 
   const handleLogout = async () => {
