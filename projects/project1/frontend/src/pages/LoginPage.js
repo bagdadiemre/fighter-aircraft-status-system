@@ -1,31 +1,29 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { login } from "../api/api";
+import { useNavigate } from "react-router-dom";
+import { handleLogin } from "../services/auth"; // Import handleLogin from auth module
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const { data } = await login(username, password);
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.user.role);
+      await handleLogin(username, password);
       navigate("/homepage");
     } catch (error) {
-      setError(error.error);
+      setError(error);
     }
   };
 
   return (
     <div className="login-container">
       <h1>Login</h1>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Username"

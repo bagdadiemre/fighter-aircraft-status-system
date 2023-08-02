@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { checkLogin, logout } from "../api/api";
+import { checkLogin, logout } from "../services/api";
 
 import {
   Container,
@@ -12,18 +12,13 @@ import {
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login"); // Use navigate to redirect
-      return;
-    }
-
     checkLogin(token)
       .then((data) => setUser(data.data.user))
-      .catch(() => navigate("/login")); // Use navigate to redirect
+      .catch(() => navigate("/login"));
   }, [navigate]);
 
   const handleLogout = async () => {
