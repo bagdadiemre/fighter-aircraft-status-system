@@ -10,7 +10,7 @@ import {
   Button,
 } from "@mui/material";
 
-const DashboardPage = () => {
+const HomePage = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
@@ -78,4 +78,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default HomePage;

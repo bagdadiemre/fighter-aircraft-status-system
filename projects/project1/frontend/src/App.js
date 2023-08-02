@@ -5,13 +5,16 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import ContactFormPage from "./pages/ContactFormPage";
-import MessagesPage from "./pages/MessagesPage";
-import UsersPage from "./pages/UsersPage";
-import ReportsPage from "./pages/ReportsPage";
-import UnauthorizedPage from "./pages/UnauthorizedPage";
+import {
+  LoginPage,
+  HomePage,
+  ContactFormPage,
+  MessagesPage,
+  UsersPage,
+  ReportsPage,
+  UnauthorizedPage,
+  NotFoundPage,
+} from "./pages";
 
 const App = () => {
   const isLoggedIn = localStorage.getItem("token");
@@ -22,7 +25,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/contact" replace />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/homepage" element={<HomePage />} />
         <Route path="/contact" element={<ContactFormPage />} />
         {isLoggedIn && (
           <>
@@ -50,6 +53,8 @@ const App = () => {
           </>
         )}
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        <Route path="/*" element={<NotFoundPage />} />{" "}
+        {/* Catch-all route for non-existent pages */}
       </Routes>
     </Router>
   );
