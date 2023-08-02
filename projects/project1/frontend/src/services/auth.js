@@ -9,7 +9,7 @@ export const handleLogin = async (username, password) => {
     localStorage.setItem("role", data.user.role);
     return true;
   } catch (error) {
-    throw error.error;
+    throw error.error;  
   }
 };
 
