@@ -34,6 +34,7 @@ export const logout = async (token) => {
     await axios.post(`${API_BASE_URL}/user/logout`, null, {
       headers: { token },
     });
+    localStorage.removeItem("role");
   } catch (error) {
     throw error.response.data;
   }

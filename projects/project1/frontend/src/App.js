@@ -1,23 +1,56 @@
 import React from "react";
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
-  Redirect,
+  Navigate,
 } from "react-router-dom";
-import LoginPage from "./components/LoginPage";
-import DashboardPage from "./components/DashboardPage";
-import ContactForm from "./pages/ContactForm";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+import ContactFormPage from "./pages/ContactFormPage";
+import MessagesPage from "./pages/MessagesPage";
+import UsersPage from "./pages/UsersPage";
+import ReportsPage from "./pages/ReportsPage";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
 
 const App = () => {
+  const isLoggedIn = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
+
   return (
     <Router>
-      <Switch>
-        <Route exact path="/login" component={LoginPage} />
-        <Route exact path="/dashboard" component={DashboardPage} />
-        <Route exact path="/contact" component={ContactForm} />
-        <Redirect exact from="/" to="/contact" />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<Navigate to="/contact" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/contact" element={<ContactFormPage />} />
+        {isLoggedIn && (
+          <>
+            <Route path="/messages" element={<MessagesPage />} />
+            <Route
+              path="/users"
+              element={
+                userRole === "admin" ? (
+                  <UsersPage />
+                ) : (
+                  <Navigate to="/unauthorized" replace />
+                )
+              }
+            />
+            <Route
+              path="/reports"
+              element={
+                userRole === "admin" ? (
+                  <ReportsPage />
+                ) : (
+                  <Navigate to="/unauthorized" replace />
+                )
+              }
+            />
+          </>
+        )}
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      </Routes>
     </Router>
   );
 };

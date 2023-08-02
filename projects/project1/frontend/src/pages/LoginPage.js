@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { login } from "../api/api";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,7 +15,8 @@ const LoginPage = () => {
     try {
       const { data } = await login(username, password);
       localStorage.setItem("token", data.token);
-      history.push("/dashboard");
+      localStorage.setItem("role", data.user.role);
+      navigate("/dashboard");
     } catch (error) {
       setError(error.error);
     }

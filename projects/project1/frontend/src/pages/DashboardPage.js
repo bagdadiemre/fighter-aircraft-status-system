@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { checkLogin, logout } from "../api/api";
 
-import { Link } from "react-router-dom";
 import {
   Container,
   CssBaseline,
@@ -13,19 +12,19 @@ import {
 
 const DashboardPage = () => {
   const [user, setUser] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      history.push("/login");
+      navigate("/login"); // Use navigate to redirect
       return;
     }
 
     checkLogin(token)
       .then((data) => setUser(data.data.user))
-      .catch(() => history.push("/login"));
-  }, [history]);
+      .catch(() => navigate("/login")); // Use navigate to redirect
+  }, [navigate]);
 
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
@@ -36,9 +35,12 @@ const DashboardPage = () => {
         console.log(error); // Handle logout error
       }
       localStorage.removeItem("token");
-      history.push("/login");
+      navigate("/login"); // Use navigate to redirect
     }
   };
+
+  const isAdmin = user?.role === "admin";
+  const isReader = user?.role === "reader";
 
   return (
     <Container component="main" maxWidth="xs">
@@ -60,6 +62,18 @@ const DashboardPage = () => {
       <div>
         <Link to="/contact">Contact Us</Link>
       </div>
+      {isAdmin && (
+        <div>
+          <Link to="/messages">Messages</Link>
+          <Link to="/users">Users</Link>
+          <Link to="/reports">Reports</Link>
+        </div>
+      )}
+      {isReader && (
+        <div>
+          <Link to="/messages">Messages</Link>
+        </div>
+      )}
     </Container>
   );
 };
