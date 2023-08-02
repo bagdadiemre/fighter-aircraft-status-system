@@ -11,9 +11,10 @@ const LoginPage = () => {
   const handleLogin = async () => {
     try {
       const data = await login(username, password);
+
       console.log("Login successful:", data);
-      // Redirect logic here based on user role (admin/reader)
-      navigate(data.data.user.role === "admin" ? "/admin" : "/reader");
+
+      navigate("/messages"); // Redirect to MessagesPage
     } catch (error) {
       console.error("Login failed:", error);
     }

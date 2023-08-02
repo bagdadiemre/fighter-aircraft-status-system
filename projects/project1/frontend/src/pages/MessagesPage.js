@@ -1,31 +1,26 @@
-import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
-import { useAuth } from '../services/AuthContext';
+import React from "react";
+import { useAuth } from "../services/AuthContext";
 
 const MessagesPage = () => {
-  const { user } = useAuth();
+  const { user, role } = useAuth();
 
   return (
     <div>
-      <header>
-        {user && (
-          <>
-            <h1>Messages Page</h1>
-            {user.role === 'admin' && (
-              <nav>
-                <ul>
-                  <li><Link to="/messages">Messages</Link></li>
-                  <li><Link to="/reports">Reports</Link></li>
-                  <li><Link to="/users">Users</Link></li>
-                </ul>
-              </nav>
-            )}
-          </>
-        )}
-      </header>
-      <main>
-        <Outlet />
-      </main>
+      <h2>Messages Page</h2>
+      {role === "admin" && (
+        <div>
+          {/* Display content for admin */}
+          <p>Admin content: Link to Page A</p>
+          <p>Admin content: Link to Page B</p>
+
+        </div>
+      )}
+      {role === "reader" && (
+        <div>
+          {/* Display content for reader */}
+          <p>Reader content: Link to Page A</p>
+        </div>
+      )}
     </div>
   );
 };
