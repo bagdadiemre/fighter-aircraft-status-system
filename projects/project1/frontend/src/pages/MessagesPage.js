@@ -1,35 +1,61 @@
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { checkLogin, logout } from "../services/authApi";
 
 const MessagesPage = () => {
-  const {
-    context: { user },
-  } = useContext(AuthContext);
+  const { context, setContext } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+    const handleCheckLogin = async () => {
+      try {
+        const data = await checkLogin();
+        setContext(data.data.user);
+      } catch (error) {
+        console.error("Check Login failed:", error);
+        console.log(context)
+        navigate("/unauthorized");
+      }
+    };
+
+    handleCheckLogin();
+  }, []);
 
   return (
     <div>
       <h2>Messages Page</h2>
-      {user?.role === "admin" && (
+      {context?.role === "admin" && (
         <div>
-          {/* Display content for admin */}
           <p>
             <Link to="/users">Users</Link>
           </p>
-          <Link to="/reports">reports</Link>
+          <p>
+            <Link to="/reports">reports</Link>
+          </p>
+          <p>
+            <button
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+            >
+              Logout
+            </button>
+          </p>
         </div>
       )}
-      {user?.role === "reader" && (
+      {context?.role === "reader" && (
         <div>
-          {/* Display content for reader */}
           <p>Reader content: Link to Page A</p>
+          <button
+            onClick={() => {
+              logout();
+              navigate("/login");
+            }}
+          >
+            Logout
+          </button>
         </div>
       )}
     </div>

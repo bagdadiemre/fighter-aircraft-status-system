@@ -12,7 +12,7 @@ import {
 } from "./pages";
 
 const App = () => {
-  const [context, setContext] = useState({});
+  const [context, setContext] = useState();
 
   return (
     <AuthProvider value={{ context, setContext }}>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import { login } from "../services/authApi";
 
 const LoginPage = () => {
-  const { context, setContext } = useContext(AuthContext);
+  const {  setContext } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -26,11 +26,13 @@ const LoginPage = () => {
         setOpenSnackbar(true);
         return;
       }
+
       const data = await login(username, password);
+
       localStorage.setItem("token", data.data.token);
-      console.log("Login successful:", data.data.user);
-      setContext({ ...context, user: data.data.user });
-      navigate("/messages"); 
+      setContext(data.data.user);
+
+      navigate("/messages"); // Redirect to MessagesPage
     } catch (error) {
       setError("Invalid credentials");
       setOpenSnackbar(true);
