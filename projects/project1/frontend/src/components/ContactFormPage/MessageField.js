@@ -12,7 +12,6 @@ const MessageField = ({ message, handleMessageChange, messageError }) => {
     <React.Fragment>
       <TextField
         variant="outlined"
-        required
         fullWidth
         label="Message"
         multiline

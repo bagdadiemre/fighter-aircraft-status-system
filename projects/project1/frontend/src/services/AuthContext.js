@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { login, checkLogin } from "./api"; // Import your API functions
+import { login, checkLogin, logout } from "./api"; // Import your API functions
 
 const AuthContext = createContext();
 
@@ -11,7 +11,12 @@ export const AuthProvider = ({ children }) => {
   const loginHandler = async (username, password) => {
     try {
       const data = await login(username, password);
-      setUser(data.user);
+      console.log("loginHandler:", data);
+      console.log("setUser:", data.data.user);
+      console.log("setToken:", data.data.token);
+      console.log("setRole:", data.data.user.role);
+
+      setUser(data.data.user);
       setToken(data.data.token);
       setRole(data.data.user.role);
 
@@ -24,8 +29,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const checkLoginHandler = async (token) => {
+  const checkLoginHandler = async () => {
     try {
+      const token = localStorage.getItem("token");
       const data = await checkLogin(token);
       setUser(data.data.user);
       return data;
@@ -34,8 +40,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logoutHandler = () => {
-    setUser(null);
+  const logoutHandler = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await logout(token);
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const contextValue = {

@@ -12,7 +12,6 @@ const NameField = ({ name, handleNameChange, nameError }) => {
     <React.Fragment>
       <TextField
         variant="outlined"
-        required
         fullWidth
         label="Name"
         value={name}

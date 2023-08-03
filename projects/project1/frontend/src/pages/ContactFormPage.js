@@ -45,6 +45,26 @@ const ContactForm = () => {
     setNameError(false);
     setMessageError(false);
 
+    if (!name) {
+      setError("Name is required.");
+      return;
+    }
+
+    if (!message) {
+      setError("Message is required.");
+      return;
+    }
+
+    if (!country) {
+      setError("Country is required.");
+      return;
+    }
+
+    if (!gender) {
+      setError("Gender is required.");
+      return;
+    }
+
     if (name.length > MAX_NAME_CHARS) {
       setNameError(true);
       return;
@@ -95,14 +115,14 @@ const ContactForm = () => {
 
   return (
     <div>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" sx={{ mt: 7 }}>
         <CssBaseline />
         <div>
           <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
             Contact Form
           </Typography>
           <form onSubmit={handleFormSubmit}>
-            <Grid container spacing={2}>
+            <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Box
                   display="flex"

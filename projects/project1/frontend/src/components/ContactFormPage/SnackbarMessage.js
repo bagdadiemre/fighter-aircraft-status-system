@@ -5,7 +5,7 @@ const SnackbarMessage = ({ error, successMessage, handleClose }) => {
   return (
     <Snackbar
       open={error !== "" || successMessage !== ""}
-      autoHideDuration={6000}
+      autoHideDuration={4000}
       onClose={handleClose}
     >
       <Alert

@@ -12,7 +12,6 @@ const MessagesPage = () => {
           {/* Display content for admin */}
           <p>Admin content: Link to Page A</p>
           <p>Admin content: Link to Page B</p>
-
         </div>
       )}
       {role === "reader" && (
