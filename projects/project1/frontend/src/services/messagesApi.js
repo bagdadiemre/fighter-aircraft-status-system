@@ -16,8 +16,9 @@ export const addNewMessage = async (name, message, gender, country) => {
   }
 };
 
-export const getMessages = async (token) => {
+export const getMessages = async () => {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.get(`${API_BASE_URL}/messages`, {
       headers: { token },
     });
@@ -27,8 +28,9 @@ export const getMessages = async (token) => {
   }
 };
 
-export const getMessageById = async (id, token) => {
+export const getMessageById = async (id) => {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.get(`${API_BASE_URL}/message/${id}`, {
       headers: { token },
     });
@@ -38,8 +40,9 @@ export const getMessageById = async (id, token) => {
   }
 };
 
-export const readMessageById = async (id, token) => {
+export const readMessageById = async (id) => {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       `${API_BASE_URL}/message/read/${id}`,
       null,
@@ -53,8 +56,9 @@ export const readMessageById = async (id, token) => {
   }
 };
 
-export const deleteMessageById = async (id, token) => {
+export const deleteMessageById = async (id) => {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       `${API_BASE_URL}/message/delete/${id}`,
       null,

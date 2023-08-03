@@ -6,6 +6,7 @@ import {
   Typography,
   Grid,
   Box,
+  Paper,
 } from "@mui/material";
 import { NameField } from "../components/ContactFormPage";
 import { MessageField } from "../components/ContactFormPage";
@@ -116,7 +117,18 @@ const ContactForm = () => {
 
   return (
     <div>
+        
       <Container component="main" maxWidth="xs" sx={{ mt: 7 }}>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 5,
+        }}
+      >
         <CssBaseline />
         <div>
           <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
@@ -195,6 +207,7 @@ const ContactForm = () => {
             </Snackbar>
           ) : null}
         </div>
+    </Paper>    
       </Container>
     </div>
   );
