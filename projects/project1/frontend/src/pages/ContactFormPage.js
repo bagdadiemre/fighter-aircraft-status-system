@@ -11,7 +11,7 @@ import { NameField } from "../components/ContactFormPage";
 import { MessageField } from "../components/ContactFormPage";
 import { CountrySelect } from "../components/ContactFormPage";
 import { GenderRadioGroup } from "../components/ContactFormPage";
-import { SnackbarMessage } from "../components/ContactFormPage";
+import { Snackbar, Alert } from "@mui/material"; // Import Snackbar and Alert
 import { addNewMessage } from "../services/messagesApi";
 import { getCountries } from "../services/countriesApi";
 
@@ -175,11 +175,25 @@ const ContactForm = () => {
               </Grid>
             </Grid>
           </form>
-          <SnackbarMessage
-            error={error}
-            successMessage={successMessage}
-            handleClose={handleSnackbarClose}
-          />
+          {error !== "" ||
+          (successMessage !== "" && successMessage !== undefined) ? (
+            <Snackbar
+              open={
+                error !== "" ||
+                (successMessage !== "" && successMessage !== undefined)
+              }
+              autoHideDuration={4000}
+              onClose={handleSnackbarClose}
+            >
+              <Alert
+                onClose={handleSnackbarClose}
+                severity={error !== "" ? "error" : "success"}
+                sx={{ width: "100%" }}
+              >
+                {error !== "" ? error : successMessage}
+              </Alert>
+            </Snackbar>
+          ) : null}
         </div>
       </Container>
     </div>
