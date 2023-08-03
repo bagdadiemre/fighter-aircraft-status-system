@@ -15,10 +15,10 @@ import {
 } from "@mui/material";
 
 const MessagesPage = () => {
-  const { context, setContext } = useContext(AuthContext);
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
+  const navigate = useNavigate();
+  const { context, setContext } = useContext(AuthContext);
   useEffect(() => {
     const handleCheckLogin = async () => {
       try {

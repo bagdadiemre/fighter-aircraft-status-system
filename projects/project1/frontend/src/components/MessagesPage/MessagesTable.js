@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getMessages } from "../../services/messagesApi";
+import { Link } from "react-router-dom";
 import {
   Table,
   TableContainer,
@@ -8,7 +9,10 @@ import {
   TableRow,
   TableCell,
   Paper,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
+import { ArrowForward } from "@mui/icons-material"; // Import the icon you want to use
 
 const MessagesTable = () => {
   const [messages, setMessages] = useState([]);
@@ -27,7 +31,7 @@ const MessagesTable = () => {
   }, []);
 
   return (
-    <TableContainer component={Paper} sx={{ mt: 8, userSelect: "none" }}>
+    <TableContainer component={Paper} sx={{ mt: 5, userSelect: "none", mb: 5 }}>
       <Table>
         <TableHead
           sx={{
@@ -35,10 +39,17 @@ const MessagesTable = () => {
           }}
         >
           <TableRow>
-            <TableCell sx={{ fontSize: "17px" }}>Name</TableCell>
-            <TableCell sx={{ fontSize: "17px" }}>Message</TableCell>
-            <TableCell sx={{ fontSize: "17px" }}>Gender</TableCell>
-            <TableCell sx={{ fontSize: "17px" }}>Country</TableCell>
+            <TableCell sx={{ fontSize: "17px", width: "16%" }}>Name</TableCell>
+            <TableCell sx={{ fontSize: "17px", width: "32%" }}>
+              Message
+            </TableCell>
+            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
+              Gender
+            </TableCell>
+            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
+              Country
+            </TableCell>
+            <TableCell sx={{ fontSize: "17px", width: "4%" }}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -51,10 +62,38 @@ const MessagesTable = () => {
                 },
               }}
             >
-              <TableCell sx={{ fontSize: "16px" }}>{message.name}</TableCell>
-              <TableCell sx={{ fontSize: "16px" }}>{message.message}</TableCell>
-              <TableCell sx={{ fontSize: "16px" }}>{message.gender}</TableCell>
-              <TableCell sx={{ fontSize: "16px" }}>{message.country}</TableCell>
+              <TableCell sx={{ fontSize: "16px", width: "16%" }}>
+                {message.name}
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: "16px",
+                  width: "32%",
+                }}
+              >
+                <Tooltip title={message.message} arrow>
+                  {message.message.length > 50
+                    ? `${message.message.substring(0, 50)}...`
+                    : message.message}
+                </Tooltip>
+              </TableCell>
+              <TableCell sx={{ fontSize: "16px", width: "16%" }}>
+                {message.gender}
+              </TableCell>
+              <TableCell sx={{ fontSize: "16px", width: "16%" }}>
+                {message.country}
+              </TableCell>
+              <TableCell align="center" sx={{ width: "4%" }}>
+                {" "}
+                {/* Add a cell for the icon */}
+                <IconButton
+                  component={Link}
+                  to={`/messages/${message.id}`}
+                  size="small"
+                >
+                  <ArrowForward /> {/* Use the icon you imported */}
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

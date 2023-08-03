@@ -5,6 +5,7 @@ import NotFoundPage from "./NotFoundPage";
 import ReportsPage from "./AdminPages/ReportsPage";
 import UsersPage from "./AdminPages/UsersPage";
 import UnauthorizedPage from "./UnauthorizedPage";
+import MessagesDetailPage from "./MessagesDetailPage";
 
 export {
   ContactFormPage,
@@ -14,4 +15,5 @@ export {
   ReportsPage,
   UnauthorizedPage,
   UsersPage,
+  MessagesDetailPage
 };
