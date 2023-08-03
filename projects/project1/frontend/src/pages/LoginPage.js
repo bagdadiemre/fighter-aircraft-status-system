@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../services/AuthContext";
+import { AuthContext } from "../services/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Container from "@mui/material/Container";
@@ -8,10 +8,12 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { login } from "../services/api";
 
 const LoginPage = () => {
+  const { context, setContext } = useContext(AuthContext);
+
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,7 +29,9 @@ const LoginPage = () => {
 
       const data = await login(username, password);
 
-      console.log("Login successful:", data);
+      console.log("Login successful:", data.data.user);
+
+      setContext({ ...context, user: data.data.user });
 
       navigate("/messages"); // Redirect to MessagesPage
     } catch (error) {

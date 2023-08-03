@@ -1,20 +1,28 @@
-import React from "react";
-import { useAuth } from "../services/AuthContext";
+import React, { useContext, useEffect } from "react";
+import { AuthContext } from "../services/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const MessagesPage = () => {
-  const { user, role } = useAuth();
+  const {
+    context: { user },
+  } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
 
   return (
     <div>
       <h2>Messages Page</h2>
-      {role === "admin" && (
+      {user?.role === "admin" && (
         <div>
           {/* Display content for admin */}
           <p>Admin content: Link to Page A</p>
           <p>Admin content: Link to Page B</p>
         </div>
       )}
-      {role === "reader" && (
+      {user?.role === "reader" && (
         <div>
           {/* Display content for reader */}
           <p>Reader content: Link to Page A</p>
