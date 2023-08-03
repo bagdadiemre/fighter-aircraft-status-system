@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { AuthProvider } from "./services/AuthProvider";
-import LoginPage from "./pages/LoginPage";
-import MessagesPage from "./pages/MessagesPage";
-import ContactFormPage from "./pages/ContactFormPage";
-import UsersPage from "./pages/UsersPage";
-import Unauthorized from "./pages/UnauthorizedPage";
+import { AuthProvider } from "./contexts/AuthProvider";
+import {
+  NotFoundPage,
+  ContactFormPage,
+  LoginPage,
+  MessagesPage,
+  ReportsPage,
+  UnauthorizedPage,
+  UsersPage,
+} from "./pages";
 
 const App = () => {
   const [context, setContext] = useState({});
@@ -18,7 +22,9 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/messages" element={<MessagesPage />} />
         <Route path="/users" element={<UsersPage />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />{" "}
+        <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        <Route path="/*" element={<NotFoundPage />} />{" "}
       </Routes>
     </AuthProvider>
   );

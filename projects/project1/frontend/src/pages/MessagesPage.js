@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { AuthContext } from "../services/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
 
 const MessagesPage = () => {
   const {
@@ -9,7 +9,9 @@ const MessagesPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) navigate("/login");
+    if (!user) {
+      navigate("/login");
+    }
   }, [user, navigate]);
 
   return (
@@ -18,8 +20,10 @@ const MessagesPage = () => {
       {user?.role === "admin" && (
         <div>
           {/* Display content for admin */}
-          <p>Admin content: Link to Page A</p>
-          <p>Admin content: Link to Page B</p>
+          <p>
+            <Link to="/users">Users</Link>
+          </p>
+          <Link to="/reports">reports</Link>
         </div>
       )}
       {user?.role === "reader" && (

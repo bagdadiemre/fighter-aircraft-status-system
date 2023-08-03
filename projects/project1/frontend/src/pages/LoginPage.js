@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../services/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Container from "@mui/material/Container";
@@ -8,7 +8,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { login } from "../services/api";
+import { login } from "../services/authApi";
 
 const LoginPage = () => {
   const { context, setContext } = useContext(AuthContext);
@@ -26,14 +26,11 @@ const LoginPage = () => {
         setOpenSnackbar(true);
         return;
       }
-
       const data = await login(username, password);
-
+      localStorage.setItem("token", data.data.token);
       console.log("Login successful:", data.data.user);
-
       setContext({ ...context, user: data.data.user });
-
-      navigate("/messages"); // Redirect to MessagesPage
+      navigate("/messages"); 
     } catch (error) {
       setError("Invalid credentials");
       setOpenSnackbar(true);
