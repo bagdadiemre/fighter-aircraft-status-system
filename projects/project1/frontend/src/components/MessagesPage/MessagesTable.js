@@ -35,21 +35,33 @@ const MessagesTable = () => {
       <Table>
         <TableHead
           sx={{
-            backgroundColor: "#f0f0f0", // Custom background color
+            backgroundColor: "#83c5be", // Custom background color
           }}
         >
           <TableRow>
-            <TableCell sx={{ fontSize: "17px", width: "16%" }}>Name</TableCell>
-            <TableCell sx={{ fontSize: "17px", width: "32%" }}>
+            <TableCell
+              sx={{ fontSize: "17px", width: "16%", color: "#ffffff" }}
+            >
+              Name
+            </TableCell>
+            <TableCell
+              sx={{ fontSize: "17px", width: "32%", color: "#ffffff" }}
+            >
               Message
             </TableCell>
-            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
+            <TableCell
+              sx={{ fontSize: "17px", width: "16%", color: "#ffffff" }}
+            >
               Gender
             </TableCell>
-            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
+            <TableCell
+              sx={{ fontSize: "17px", width: "16%", color: "#ffffff" }}
+            >
               Country
             </TableCell>
-            <TableCell sx={{ fontSize: "17px", width: "4%" }}></TableCell>
+            <TableCell
+              sx={{ fontSize: "17px", width: "4%", color: "#ffffff" }}
+            ></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -57,8 +69,9 @@ const MessagesTable = () => {
             <TableRow
               key={message.id}
               sx={{
+                backgroundColor: message.read === "true" ? "white" : "#edf6f9",
                 "&:hover": {
-                  backgroundColor: "#f0f0f0",
+                  backgroundColor: "#f5f3f4",
                 },
               }}
             >

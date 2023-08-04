@@ -56,7 +56,7 @@ const MessagesPage = () => {
           marginBottom: "20px",
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ backgroundColor: "#006d77" }}>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Messages Page
           </Typography>

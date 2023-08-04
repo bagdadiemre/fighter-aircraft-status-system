@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { checkLogin } from "../services/authApi";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { getMessageById, deleteMessageById } from "../services/messagesApi";
+import { getMessageById, deleteMessageById, readMessageById } from "../services/messagesApi";
 import { Button, Paper, Typography, Alert } from "@mui/material";
 
 const MessageDetailsPage = () => {
@@ -15,6 +15,10 @@ const MessageDetailsPage = () => {
       try {
         const response = await getMessageById(id);
         setMessage(response.data.message);
+
+        if (context?.role === "admin" || context?.role === "reader") {
+          await readMessageById(id);
+        }
       } catch (error) {
         setError("Error fetching message details.");
       }
