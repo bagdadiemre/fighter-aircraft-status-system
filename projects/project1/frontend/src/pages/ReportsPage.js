@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { checkLogin } from "../../services/authApi";
+import { checkLogin } from "../services/authApi";
 
-const UsersPage = () => {
+const ReportsPage = () => {
   const { context, setContext } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -22,14 +22,14 @@ const UsersPage = () => {
 
   return (
     <div>
-      {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
+      {context?.role !== "admin" && <div>{navigate("./unauthorized")}</div>}
       {context?.role === "admin" && (
         <div>
-          <h2>Users Page</h2>
+          <h2>Reports Page</h2>
         </div>
       )}
     </div>
   );
 };
 
-export default UsersPage;
+export default ReportsPage;

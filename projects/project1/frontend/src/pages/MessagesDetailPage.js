@@ -2,8 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { checkLogin } from "../services/authApi";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { getMessageById, deleteMessageById, readMessageById } from "../services/messagesApi";
+import {
+  getMessageById,
+  deleteMessageById,
+  readMessageById,
+} from "../services/messagesApi";
 import { Button, Paper, Typography, Alert } from "@mui/material";
+import Header from "../components/Common/Header";
 
 const MessageDetailsPage = () => {
   const { id } = useParams();
@@ -67,51 +72,54 @@ const MessageDetailsPage = () => {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "90vh",
-      }}
-    >
-      <Paper elevation={3} sx={{ padding: 3, maxWidth: 300, width: "100%" }}>
-        <Typography variant="h5" gutterBottom>
-          Message Details
-        </Typography>
-        <Typography variant="body1">
-          <strong>Name:</strong> {message.name}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Message:</strong> {message.message}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Gender:</strong> {message.gender}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Country:</strong> {message.country}
-        </Typography>
-        <Button
-          variant="outlined"
-          color="primary"
-          component={Link}
-          to="/messages"
-          sx={{ mt: 3, mr: 12 }}
-        >
-          Homepage
-        </Button>
-        {context?.role === "admin" && (
+    <>
+      <Header headerName={"Messages Page"} context={context} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "90vh",
+        }}
+      >
+        <Paper elevation={3} sx={{ padding: 3, maxWidth: 300, width: "100%" }}>
+          <Typography variant="h5" gutterBottom>
+            Message Details
+          </Typography>
+          <Typography variant="body1">
+            <strong>Name:</strong> {message.name}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Message:</strong> {message.message}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Gender:</strong> {message.gender}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Country:</strong> {message.country}
+          </Typography>
           <Button
             variant="outlined"
-            color="error"
-            onClick={handleDelete}
-            sx={{ mt: 3 }}
+            color="primary"
+            component={Link}
+            to="/messages"
+            sx={{ mt: 3, mr: 12 }}
           >
-            Delete
+            Homepage
           </Button>
-        )}
-      </Paper>
-    </div>
+          {context?.role === "admin" && (
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleDelete}
+              sx={{ mt: 3 }}
+            >
+              Delete
+            </Button>
+          )}
+        </Paper>
+      </div>
+    </>
   );
 };
 

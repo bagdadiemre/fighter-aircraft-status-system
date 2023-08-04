@@ -5,10 +5,10 @@ const API_BASE_URL = "http://localhost:5165/api";
 export const addNewUserWithReaderRole = async (
   username,
   password,
-  base64Photo,
-  token
+  base64Photo
 ) => {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       `${API_BASE_URL}/user/add-reader`,
       { username, password, base64Photo },
@@ -22,8 +22,10 @@ export const addNewUserWithReaderRole = async (
   }
 };
 
-export const getUsers = async (token) => {
+export const getUsers = async () => {
   try {
+    const token = localStorage.getItem("token");
+
     const response = await axios.get(`${API_BASE_URL}/users`, {
       headers: { token },
     });
@@ -33,8 +35,10 @@ export const getUsers = async (token) => {
   }
 };
 
-export const getUserById = async (id, token) => {
+export const getUserById = async (id) => {
   try {
+    const token = localStorage.getItem("token");
+
     const response = await axios.get(`${API_BASE_URL}/user/${id}`, {
       headers: { token },
     });
@@ -44,14 +48,9 @@ export const getUserById = async (id, token) => {
   }
 };
 
-export const updateUserById = async (
-  id,
-  username,
-  password,
-  base64Photo,
-  token
-) => {
+export const updateUserById = async (id, username, password, base64Photo) => {
   try {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       `${API_BASE_URL}/user/update/${id}`,
       { username, password, base64Photo },
