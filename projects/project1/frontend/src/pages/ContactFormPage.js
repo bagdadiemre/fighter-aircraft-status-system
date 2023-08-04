@@ -117,97 +117,96 @@ const ContactForm = () => {
 
   return (
     <div>
-        
       <Container component="main" maxWidth="xs" sx={{ mt: 7 }}>
-      <Paper
-        elevation={3}
-        sx={{
-          padding: 3,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          mt: 5,
-        }}
-      >
-        <CssBaseline />
-        <div>
-          <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-            Contact Form
-          </Typography>
-          <form onSubmit={handleFormSubmit}>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="flex-end"
-                >
-                  <NameField
-                    name={name}
-                    handleNameChange={handleNameChange}
-                    nameError={nameError}
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 3,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: 5,
+          }}
+        >
+          <CssBaseline />
+          <div>
+            <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+              Contact Form
+            </Typography>
+            <form onSubmit={handleFormSubmit}>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="flex-end"
+                  >
+                    <NameField
+                      name={name}
+                      handleNameChange={handleNameChange}
+                      nameError={nameError}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="flex-end"
+                  >
+                    <MessageField
+                      message={message}
+                      handleMessageChange={handleMessageChange}
+                      messageError={messageError}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <CountrySelect
+                    countries={countries}
+                    country={country}
+                    handleCountryChange={handleCountryChange}
                   />
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="flex-end"
-                >
-                  <MessageField
-                    message={message}
-                    handleMessageChange={handleMessageChange}
-                    messageError={messageError}
+                </Grid>
+                <Grid item xs={12}>
+                  <GenderRadioGroup
+                    gender={gender}
+                    handleGenderChange={handleGenderChange}
                   />
-                </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                  >
+                    Submit
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <CountrySelect
-                  countries={countries}
-                  country={country}
-                  handleCountryChange={handleCountryChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <GenderRadioGroup
-                  gender={gender}
-                  handleGenderChange={handleGenderChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                >
-                  Submit
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-          {error !== "" ||
-          (successMessage !== "" && successMessage !== undefined) ? (
-            <Snackbar
-              open={
-                error !== "" ||
-                (successMessage !== "" && successMessage !== undefined)
-              }
-              autoHideDuration={4000}
-              onClose={handleSnackbarClose}
-            >
-              <Alert
+            </form>
+            {error !== "" ||
+            (successMessage !== "" && successMessage !== undefined) ? (
+              <Snackbar
+                open={
+                  error !== "" ||
+                  (successMessage !== "" && successMessage !== undefined)
+                }
+                autoHideDuration={4000}
                 onClose={handleSnackbarClose}
-                severity={error !== "" ? "error" : "success"}
-                sx={{ width: "100%" }}
               >
-                {error !== "" ? error : successMessage}
-              </Alert>
-            </Snackbar>
-          ) : null}
-        </div>
-    </Paper>    
+                <Alert
+                  onClose={handleSnackbarClose}
+                  severity={error !== "" ? "error" : "success"}
+                  sx={{ width: "100%" }}
+                >
+                  {error !== "" ? error : successMessage}
+                </Alert>
+              </Snackbar>
+            ) : null}
+          </div>
+        </Paper>
       </Container>
     </div>
   );
