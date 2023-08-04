@@ -11,10 +11,10 @@ import {
   Avatar,
   IconButton,
 } from "@mui/material";
-import { ArrowForward, Add, Close } from "@mui/icons-material";
+import { ArrowForward, Add } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const UsersTable = ({ users, showAddForm, handleAddButtonClick }) => {
+const UsersTable = ({ users }) => {
   return (
     <TableContainer
       component={Paper}
@@ -41,8 +41,8 @@ const UsersTable = ({ users, showAddForm, handleAddButtonClick }) => {
               <Typography variant="subtitle1">Role</Typography>
             </TableCell>
             <TableCell sx={{ width: "12%" }}>
-              <IconButton onClick={handleAddButtonClick} size="small">
-                {showAddForm ? <Close /> : <Add />}
+              <IconButton component={Link} to={`/add-user`} size="small">
+                <Add />
               </IconButton>
             </TableCell>
           </TableRow>
@@ -63,7 +63,11 @@ const UsersTable = ({ users, showAddForm, handleAddButtonClick }) => {
                 <Typography variant="subtitle1">{user.role}</Typography>
               </TableCell>
               <TableCell>
-                <IconButton component={Link} to={`/users/${user.id}`} size="small">
+                <IconButton
+                  component={Link}
+                  to={`/users/${user.id}`}
+                  size="small"
+                >
                   <ArrowForward />
                 </IconButton>
               </TableCell>

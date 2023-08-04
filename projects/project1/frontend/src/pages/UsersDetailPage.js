@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { checkLogin } from "../services/authApi";
+import Header from "../components/Common/Header";
+
 import {
   Avatar,
   Button,
@@ -99,107 +101,111 @@ const UsersDetailPage = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 10 }}>
-      <Card>
-        <CardHeader
-          avatar={
-            <label
-              htmlFor="upload-photo"
-              style={{
-                cursor: editing ? "pointer" : "default",
-                position: "relative",
-              }}
-            >
-              <Avatar
-                alt={user.username}
-                src={editedUser.base64Photo}
-                sx={{ width: 80, height: 80 }}
-              />
-              {editing && (
-                <EditIcon
-                  sx={{
-                    position: "absolute",
-                    bottom: 0,
-                    right: 0,
-                    backgroundColor: "white",
-                    borderRadius: "50%",
-                    padding: "2px",
-                    width: 16, // Adjust the width and height as needed
-                    height: 16,
-                  }}
+    <>
+      <Header headerName={"Users Detail Page"} context={context} />
+
+      <Container maxWidth="sm" sx={{ mt: 10 }}>
+        <Card>
+          <CardHeader
+            avatar={
+              <label
+                htmlFor="upload-photo"
+                style={{
+                  cursor: editing ? "pointer" : "default",
+                  position: "relative",
+                }}
+              >
+                <Avatar
+                  alt={user.username}
+                  src={editedUser.base64Photo}
+                  sx={{ width: 80, height: 80 }}
                 />
-              )}
-              {editing && (
-                <input
-                  type="file"
-                  id="upload-photo"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handleImageUpload}
-                />
-              )}
-            </label>
-          }
-          titleTypographyProps={{ variant: "h6" }}
-          title={`User: ${user.username}`}
-          subheaderTypographyProps={{ variant: "subtitle1" }}
-          subheader={`Role: ${user.role}`}
-        />
-        <CardActions sx={{ ml: 1, mb: 1 }}>
-          <Button
-            onClick={() => setEditing(!editing)}
-            variant="contained"
-            color="primary"
-          >
-            {editing ? "Cancel" : "Edit"}
-          </Button>
-          {editing && (
+                {editing && (
+                  <EditIcon
+                    sx={{
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                      backgroundColor: "white",
+                      borderRadius: "50%",
+                      padding: "2px",
+                      width: 16, // Adjust the width and height as needed
+                      height: 16,
+                    }}
+                  />
+                )}
+                {editing && (
+                  <input
+                    type="file"
+                    id="upload-photo"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                  />
+                )}
+              </label>
+            }
+            titleTypographyProps={{ variant: "h6" }}
+            title={`User: ${user.username}`}
+            subheaderTypographyProps={{ variant: "subtitle1" }}
+            subheader={`Role: ${user.role}`}
+          />
+          <CardActions sx={{ ml: 1, mb: 1 }}>
             <Button
-              onClick={handleUpdate}
+              onClick={() => setEditing(!editing)}
               variant="contained"
               color="primary"
-              disabled={!editedUser.isDirty} // Disable save button if no changes
             >
-              Save
+              {editing ? "Cancel" : "Edit"}
             </Button>
-          )}
-        </CardActions>
-        <Collapse in={editing}>
-          <CardContent>
-            <TextField
-              label="Username"
-              fullWidth
-              value={editedUser.username}
-              onChange={(e) =>
-                setEditedUser({
-                  ...editedUser,
-                  username: e.target.value,
-                  isDirty: true,
-                })
-              }
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              label="Password"
-              fullWidth
-              value={editedUser.password}
-              onChange={(e) =>
-                setEditedUser({
-                  ...editedUser,
-                  password: e.target.value,
-                  isDirty: true,
-                })
-              }
-              sx={{ mb: 2 }}
-            />
+            {editing && (
+              <Button
+                onClick={handleUpdate}
+                variant="contained"
+                color="primary"
+                disabled={!editedUser.isDirty} // Disable save button if no changes
+              >
+                Save
+              </Button>
+            )}
+          </CardActions>
+          <Collapse in={editing}>
+            <CardContent>
+              <TextField
+                label="Username"
+                fullWidth
+                value={editedUser.username}
+                onChange={(e) =>
+                  setEditedUser({
+                    ...editedUser,
+                    username: e.target.value,
+                    isDirty: true,
+                  })
+                }
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="Password"
+                fullWidth
+                value={editedUser.password}
+                onChange={(e) =>
+                  setEditedUser({
+                    ...editedUser,
+                    password: e.target.value,
+                    isDirty: true,
+                  })
+                }
+                sx={{ mb: 2 }}
+              />
 
-            <Typography variant="body2">
-              Original Password: {user.password}
-            </Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
-    </Container>
+              <Typography variant="body2">
+                Original Password: {user.password}
+              </Typography>
+            </CardContent>
+          </Collapse>
+        </Card>
+      </Container>
+    </>
   );
 };
 

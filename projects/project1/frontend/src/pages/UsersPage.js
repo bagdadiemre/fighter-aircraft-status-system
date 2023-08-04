@@ -3,18 +3,13 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Common/Header";
 import UsersTable from "../components/UsersPage/UsersTable";
-import UsersAddForm from "../components/UsersPage/UserAddForm";
 import { checkLogin } from "../services/authApi";
-import { getUsers, addNewUserWithReaderRole } from "../services/usersApi";
-import { Grid, Paper } from "@mui/material"; // Import Slide and Paper from MUI
+import { getUsers } from "../services/usersApi";
 
 const UsersPage = () => {
   const { context, setContext } = useContext(AuthContext);
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
   const fetchUsers = async () => {
     try {
@@ -40,22 +35,6 @@ const UsersPage = () => {
     fetchUsers();
   }, [setContext]);
 
-  const handleAddUser = async (e) => {
-    e.preventDefault();
-    try {
-      await addNewUserWithReaderRole(username, password);
-      fetchUsers();
-      setUsername("");
-      setPassword("");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleAddButtonClick = () => {
-    setShowAddForm((prevShowAddForm) => !prevShowAddForm);
-  };
-
   return (
     <div>
       {/* Conditional checks for rendering components */}
@@ -67,40 +46,8 @@ const UsersPage = () => {
       {context?.role === "admin" && (
         <div>
           <Header headerName={"Users Page"} context={context} />
-
-          <Grid container spacing={2}>
-            <Grid item xs={showAddForm ? 8 : 12}>
-              {/* Conditional check before rendering UsersTable */}
-              {users.length > 0 && (
-                <UsersTable
-                  users={users}
-                  showAddForm={showAddForm}
-                  handleAddButtonClick={handleAddButtonClick}
-                />
-              )}
-            </Grid>
-
-            {showAddForm && (
-              <Grid
-                item
-                xs={
-                  (showAddForm ? 4 : 0,
-                  { display: "flex", justifyContent: "center", mt: 10 })
-                }
-              >
-                {showAddForm && (
-                  <UsersAddForm
-                    handleAddUser={handleAddUser}
-                    username={username}
-                    setUsername={setUsername}
-                    password={password}
-                    setPassword={setPassword}
-                    show={showAddForm}
-                  />
-                )}
-              </Grid>
-            )}
-          </Grid>
+          {/* Conditional check before rendering UsersTable */}
+          <UsersTable users={users} />
         </div>
       )}
     </div>

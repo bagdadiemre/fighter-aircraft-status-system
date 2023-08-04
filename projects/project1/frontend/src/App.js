@@ -11,6 +11,7 @@ import {
   UsersPage,
   MessagesDetailPage,
   UsersDetailPage,
+  AddUserPage,
 } from "./pages";
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="/messages/:id" element={<MessagesDetailPage />} />
         <Route path="/users/:id" element={<UsersDetailPage />} />
+        <Route path="/add-user" element={<AddUserPage />} />
         <Route path="/*" element={<NotFoundPage />} />{" "}
       </Routes>
     </AuthProvider>
