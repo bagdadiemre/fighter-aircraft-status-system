@@ -1,0 +1,94 @@
+/* WebSocketClient.css */
+/* WebSocketClient.css */
+.container {
+  position: relative;
+  width: 1000px; /* Set the width to 1000px */
+  height: 650px; /* Set the height to 800px */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: black; /* Set the background color to black */
+}
+
+.plane {
+  position: absolute;
+  left: 40px; /* Center horizontally */
+  width: 300px; /* Adjust the width */
+  height: 300px; /* Adjust the height */
+  transform-origin: center center;
+  fill: white; /* Set the plane SVG color to white */
+}
+
+.battery {
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0.8;
+  transition: opacity 0.5s ease-in-out;
+  fill: white; /* Set the battery SVG color to white */
+}
+
+/* ... rest of your CSS ... */
+
+.battery.blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    opacity: 0;
+  }
+}
+
+.speedometer {
+  position: absolute;
+  bottom: 20px;
+  right: -20px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  fill: white;
+}
+
+.speedometer-text {
+  font-size: 16px;
+  margin-top: 5px;
+  color: white;
+}
+
+.battery-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 150px; /* Adjust the width to fit all rectangles */
+  height: 100px; /* Adjust the height */
+}
+
+.battery-rect {
+  fill: green;
+}
+
+.battery-rect.yellow {
+  fill: yellow;
+}
+
+.battery-rect.red {
+  fill: red;
+}
+
+.buttons {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.buttons button {
+  margin: 0 10px;
+  padding: 5px 10px;
+}
+
+.battery-level {
+  color: white;
+}
