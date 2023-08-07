@@ -1,11 +1,11 @@
 import React from "react";
-import WebSocketClient from "./utils/WebSocketClient";
-import "./utils/WebSocketClient.css";
+import "./WebSocketProject.css";
+import WebSocket from "./WebSocketProject";
 
 function App() {
   return (
     <div className="App">
-      <WebSocketClient />
+      <WebSocket />
     </div>
   );
 }

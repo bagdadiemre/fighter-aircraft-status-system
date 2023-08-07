@@ -19,6 +19,14 @@
   fill: white; /* Set the plane SVG color to white */
 }
 
+.svg-container{
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+
 .battery {
   position: absolute;
   right: 0;

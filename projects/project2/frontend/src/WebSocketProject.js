@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function WebSocketClient() {
+const WebSocketProject = () => {
   const [ws, setWs] = useState(null);
   const [planeAngle, setPlaneAngle] = useState(-45);
   const [planeSpeed, setPlaneSpeed] = useState(0);
@@ -25,7 +25,7 @@ function WebSocketClient() {
           break;
         case "PLANE_SPEED":
           setPlaneSpeed(eventData.data.speed);
-          setArrowRotation((eventData.data.speed / 100) * 180 - 90);
+          setArrowRotation((eventData.data.speed / 100) * 270 - 135);
           break;
         case "PLANE_BATTERY":
           setBatteryLevel(eventData.data.battery);
@@ -137,19 +137,49 @@ function WebSocketClient() {
             viewBox="0 0 471.829 471.829"
             xmlSpace="preserve"
           >
-            <rect
+            {/* <rect
               className={`battery-rect ${getBatteryColor()}`}
               x="150"
               y={`${100 - batteryLevel * 0.9}%`}
               width="36.5%"
-              height={`${batteryLevel * 0.9}%`}
-            />
+              height={`${batteryLevel}%`}
+            /> */}
+            <svg className="svg-container">
+              <g
+                style={{
+                  transformOrigin: "center",
+                  transform: "scaleY(-1)",
+                }}
+              >
+                <svg
+                  className={`battery-rect ${getBatteryColor()}`}
+                  height={`${batteryLevel}%`}
+                >
+                  <rect x="155" y="40" width="160" height="80" />
+                  <rect x="155" y="130" width="160" height="80" />
+                  <rect x="155" y="220" width="160" height="80" />
+                  <rect x="155" y="310" width="160" height="80" />
+                </svg>
+              </g>
+            </svg>
+
+            {batteryLevel < 70 && (
+              <text
+                x="50%"
+                y="25%"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="50"
+                fill="white"
+              >
+                {batteryLevel}%
+              </text>
+            )}
 
             <path d="M319.089,27.221h-36.475V0h-95.27v27.221h-34.607c-22.517,0-40.829,18.317-40.829,40.832v362.946   c0,22.51,18.317,40.83,40.829,40.83h166.352c22.524,0,40.832-18.32,40.832-40.83V68.052   C359.921,45.538,341.613,27.221,319.089,27.221z M332.705,431.002c0,7.501-6.108,13.607-13.616,13.607H152.737   c-7.501,0-13.608-6.095-13.608-13.607V68.052c0-7.501,6.107-13.611,13.608-13.611h166.352c7.508,0,13.616,6.109,13.616,13.611" />
           </svg>
         </svg>
       </div>
-      );
       {/* Render the speedometer SVG and apply rotation */}
       <div className="speedometer">
         <svg
@@ -167,19 +197,22 @@ function WebSocketClient() {
           <svg
             className="speedometer-arrow"
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 100 110"
-            width="400"
-            height="400"
-            x="312"
-            y="200"
+            viewBox="0 0 60 300"
+            width="1000"
+            height="1000"
+            x="-45"
+            y="240"
             fill="white"
-            transform-origin="center bottom"
             style={{
               transform: `rotate(${arrowRotation}deg)`,
             }}
           >
-            <polygon points="50,5 43,90 57,90" />
-            <circle cx="50" cy="93" r="12" />
+            <g
+              transform={`translate(50, 93) rotate(${arrowRotation}) translate(-50, -93)`}
+            >
+              <polygon points="50,5 43,90 57,90" />
+              <circle cx="50" cy="93" r="12" />
+            </g>
           </svg>
         </svg>
 
@@ -197,6 +230,6 @@ function WebSocketClient() {
       </div>
     </div>
   );
-}
+};
 
-export default WebSocketClient;
+export default WebSocketProject;
