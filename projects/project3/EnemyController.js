@@ -1,3 +1,4 @@
+// EnemyController.js
 import Enemy from "./Enemy.js";
 import MovingDirection from "./MovingDirection.js";
 
@@ -11,6 +12,8 @@ export default class EnemyController {
   ];
 
   enemyRows = [];
+
+  
 
   currentDirection = MovingDirection.right;
   xVelocity = 0;

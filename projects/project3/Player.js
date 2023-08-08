@@ -1,3 +1,4 @@
+// Player.js
 export default class Player {
   rightPressed = false;
   leftPressed = false;

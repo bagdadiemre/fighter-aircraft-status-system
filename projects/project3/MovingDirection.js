@@ -1,3 +1,4 @@
+// MovingDirection.js
 const MovingDirection = {
   left: 0,
   right: 1,
