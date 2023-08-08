@@ -11,7 +11,7 @@ export default class BulletController {
     this.soundEnabled = soundEnabled;
 
     this.shootSound = new Audio("sounds/shoot.wav");
-    this.shootSound.volume = 0.2;
+    this.shootSound.volume = 0.02;
   }
 
   draw(ctx) {
@@ -37,7 +37,15 @@ export default class BulletController {
     return false;
   }
 
+  lastUpdateTime = 0;
+  movementDelay = 250; // 500 milliseconds
+
   shoot(x, y, velocity, timeTillNextBulletAllowed = 0) {
+    if (Date.now() - this.lastUpdateTime < this.movementDelay) {
+      return;
+    }
+    this.lastUpdateTime = Date.now();
+
     if (
       this.timeTillNextBulletAllowed <= 0 &&
       this.bullets.length < this.maxBulletAtATime

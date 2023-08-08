@@ -13,7 +13,12 @@ export default class Enemy {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
 
+  lastUpdateTime = 0;
+  movementDelay = 500; // 500 milliseconds
+  stepCount = 0;
+
   move(xVelocity, yVelocity) {
+    
     this.x += xVelocity;
     this.y += yVelocity;
   }

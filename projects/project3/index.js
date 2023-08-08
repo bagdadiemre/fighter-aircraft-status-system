@@ -1,11 +1,12 @@
+// index.js
 import EnemyController from "./EnemyController.js";
 import Player from "./Player.js";
 import BulletController from "./BulletController.js";
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 600;
-canvas.height = 600;
+canvas.width = 605 ;
+canvas.height = 605;
 
 const background = new Image();
 background.src = "images/space.png";
@@ -103,7 +104,7 @@ function pauseGame(pause) {
 }
 
 document.addEventListener("keydown", (event) => {
-  if (event.code === "KeyP") {
+  if (event.code === "KeyP" && gameStarted && !isGameOver) {
     // Press 'P' key to toggle pause
     pauseGame(!isPaused);
   }

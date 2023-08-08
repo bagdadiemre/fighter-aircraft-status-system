@@ -13,14 +13,12 @@ export default class EnemyController {
 
   enemyRows = [];
 
-  
-
   currentDirection = MovingDirection.right;
   xVelocity = 0;
   yVelocity = 0;
-  defaultXVelocity = 1;
-  defaultYVelocity = 1;
-  moveDownTimerDefault = 30;
+  defaultXVelocity = 11;
+  defaultYVelocity = 11;
+  moveDownTimerDefault = 100;
   moveDownTimer = this.moveDownTimerDefault;
   fireBulletTimerDefault = 100;
   fireBulletTimer = this.fireBulletTimerDefault;
@@ -31,7 +29,7 @@ export default class EnemyController {
     this.playerBulletController = playerBulletController;
 
     this.enemyDeathSound = new Audio("sounds/invaderkilled.wav");
-    this.enemyDeathSound.volume = 0.2;
+    this.enemyDeathSound.volume = 0.01;
 
     this.createEnemies();
   }
@@ -91,7 +89,7 @@ export default class EnemyController {
         this.xVelocity = this.defaultXVelocity;
         this.yVelocity = 0;
         const rightMostEnemy = enemyRow[enemyRow.length - 1];
-        if (rightMostEnemy.x + rightMostEnemy.width >= this.canvas.width) {
+        if (rightMostEnemy.x + rightMostEnemy.width >= this.canvas.width - 11) {
           this.currentDirection = MovingDirection.downLeft;
           break;
         }
@@ -125,7 +123,28 @@ export default class EnemyController {
     return false;
   }
 
+  lastUpdateTime = 0;
+  movementDelay = 500; // 500 milliseconds
+  stepCount = 0;
+
   drawEnemies(ctx) {
+    if (Date.now() - this.lastUpdateTime < this.movementDelay) {
+      this.enemyRows.flat().forEach((enemy) => {
+        enemy.draw(ctx);
+      });
+      return;
+    }
+    this.stepCount++;
+
+    if (this.stepCount % 10 == 0 && this.movementDelay > 250) {
+      this.stepCount = 0;
+      this.movementDelay -= 25;
+    }
+
+    console.log(this.movementDelay);
+
+    this.lastUpdateTime = Date.now();
+
     this.enemyRows.flat().forEach((enemy) => {
       enemy.move(this.xVelocity, this.yVelocity);
       enemy.draw(ctx);
