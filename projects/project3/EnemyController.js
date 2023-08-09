@@ -16,8 +16,8 @@ export default class EnemyController {
   currentDirection = MovingDirection.right;
   xVelocity = 0;
   yVelocity = 0;
-  defaultXVelocity = 11;
-  defaultYVelocity = 11;
+  defaultXVelocity = 50;
+  defaultYVelocity = 15;
   moveDownTimerDefault = 100;
   moveDownTimer = this.moveDownTimerDefault;
   fireBulletTimerDefault = 100;
@@ -57,14 +57,22 @@ export default class EnemyController {
   }
 
   fireBullet() {
-    // TODO hangi enemyden ateş edileceğini belirle
     this.fireBulletTimer--;
     if (this.fireBulletTimer <= 0) {
-      this.fireBulletTimer = this.fireBulletTimerDefault;
+      this.fireBulletTimer = Math.floor(Math.random() * 100) + 100;
+      console.log(this.fireBulletTimer);
+
       const allEnemies = this.enemyRows.flat();
-      const enemyIndex = Math.floor(Math.random() * allEnemies.length);
-      const enemy = allEnemies[enemyIndex];
-      this.enemyBulletController.shoot(enemy.x + enemy.width / 2, enemy.y, -3);
+      const enemy3s = allEnemies.filter((enemy) => enemy.type === 3);
+      if (enemy3s.length > 0) {
+        const enemyIndex = Math.floor(Math.random() * enemy3s.length);
+        const enemy = enemy3s[enemyIndex];
+        this.enemyBulletController.shoot(
+          enemy.x + enemy.width / 2,
+          enemy.y,
+          -3
+        );
+      }
     }
   }
 
@@ -140,9 +148,6 @@ export default class EnemyController {
       this.stepCount = 0;
       this.movementDelay -= 25;
     }
-
-    console.log(this.movementDelay);
-
     this.lastUpdateTime = Date.now();
 
     this.enemyRows.flat().forEach((enemy) => {

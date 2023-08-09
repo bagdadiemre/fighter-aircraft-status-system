@@ -7,6 +7,7 @@ export default class Enemy {
     this.height = 32;
     this.image = new Image();
     this.image.src = `images/enemy${imageNumber}.png`;
+    this.type = imageNumber;
   }
 
   draw(ctx) {
@@ -18,7 +19,6 @@ export default class Enemy {
   stepCount = 0;
 
   move(xVelocity, yVelocity) {
-    
     this.x += xVelocity;
     this.y += yVelocity;
   }

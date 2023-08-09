@@ -5,8 +5,8 @@ import BulletController from "./BulletController.js";
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 605 ;
-canvas.height = 605;
+canvas.width = 1005;
+canvas.height = 705;
 
 const background = new Image();
 background.src = "images/space.png";
@@ -29,7 +29,6 @@ function game() {
   }
   checkGameOver();
   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-  displayGameOver();
   if (!isGameOver) {
     enemyController.draw(ctx);
     player.draw(ctx);
@@ -41,11 +40,20 @@ function game() {
 function displayGameOver() {
   if (isGameOver) {
     let text = didWin ? "You Win!" : "Game Over!";
-    let textOffset = didWin ? 3.5 : 5;
 
     ctx.fillStyle = "white";
     ctx.font = "70px Arial";
-    ctx.fillText(text, canvas.width / textOffset, canvas.height / 2);
+
+    // Calculate text width
+    let textWidth = ctx.measureText(text).width;
+
+    // Calculate the x position for centered text
+    let x = (canvas.width - textWidth) / 2;
+
+    // Calculate the y position for centered text
+    let y = canvas.height / 2;
+
+    ctx.fillText(text, x, y);
   }
 }
 
@@ -55,17 +63,30 @@ function checkGameOver() {
   }
 
   if (enemyBulletController.collideWith(player)) {
-    isGameOver = true;
+    endGame(false);
   }
 
   if (enemyController.collideWith(player)) {
-    isGameOver = true;
+    endGame(false);
   }
 
   if (enemyController.enemyRows.length === 0) {
-    isGameOver = true;
-    didWin = true;
+    endGame(true);
   }
+}
+
+function endGame(win) {
+  isGameOver = true;
+  didWin = win;
+
+  if (didWin) {
+    document.getElementById("game-over-text").textContent = "You Win!";
+  } else {
+    document.getElementById("game-over-text").textContent = "Game Over!";
+  }
+
+  pauseGame(false);
+  document.getElementById("game-over-screen").style.display = "flex";
 }
 
 const homeScreen = document.getElementById("home-screen");
@@ -109,5 +130,15 @@ document.addEventListener("keydown", (event) => {
     pauseGame(!isPaused);
   }
 });
+
+const restartButton = document.getElementById("restart-button");
+restartButton.addEventListener("click", restartGame);
+
+const restartGameButton = document.getElementById("restart-game-button");
+restartGameButton.addEventListener("click", restartGame);
+
+function restartGame() {
+  location.reload(); // Reload the page to restart the game
+}
 
 setInterval(game, 1000 / 60);
