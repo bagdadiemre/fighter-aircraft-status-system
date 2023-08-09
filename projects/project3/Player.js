@@ -54,7 +54,7 @@ export default class Player {
       this.leftPressed = true;
     }
 
-    if (event.code === "Space") {
+    if (event.code === "KeyX") {
       this.shootPressed = true;
     }
   };
@@ -68,7 +68,7 @@ export default class Player {
       this.leftPressed = false;
     }
 
-    if (event.code === "Space") {
+    if (event.code === "KeyX") {
       this.shootPressed = false;
     }
   };
