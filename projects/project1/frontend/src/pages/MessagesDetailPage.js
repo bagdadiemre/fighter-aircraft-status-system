@@ -67,7 +67,6 @@ const MessageDetailsPage = () => {
   }
 
   if (!message) {
-    // Implement loading state or redirect
     return null;
   }
 

@@ -26,6 +26,8 @@ const ContactForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [nameError, setNameError] = useState(false);
   const [messageError, setMessageError] = useState(false);
+  const [countryError, setCountryError] = useState(false);
+  const [genderError, setGenderError] = useState(false);
 
   useEffect(() => {
     fetchCountries();
@@ -49,21 +51,25 @@ const ContactForm = () => {
 
     if (!name) {
       setError("Name is required.");
+      setNameError(true);
       return;
     }
 
     if (!message) {
       setError("Message is required.");
+      setMessageError(true);
       return;
     }
 
     if (!country) {
       setError("Country is required.");
+      setCountryError(true);
       return;
     }
 
     if (!gender) {
       setError("Gender is required.");
+      setGenderError(true);
       return;
     }
 
@@ -92,19 +98,23 @@ const ContactForm = () => {
   const handleNameChange = (e) => {
     const inputName = e.target.value;
     setName(inputName.slice(0, MAX_NAME_CHARS));
+    setNameError(false); // Clear the name error when the user starts typing
   };
 
   const handleMessageChange = (e) => {
     const inputMessage = e.target.value;
     setMessage(inputMessage.slice(0, MAX_MESSAGE_CHARS));
+    setMessageError(false); // Clear the message error when the user starts typing
   };
 
   const handleCountryChange = (e, value) => {
     setCountry(value);
+    setCountryError(false);
   };
 
   const handleGenderChange = (e) => {
     setGender(e.target.value);
+    setGenderError(false);
   };
 
   const MAX_NAME_CHARS = 50;
@@ -125,7 +135,8 @@ const ContactForm = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            mt: 5,
+            justifyContent: "center",
+            mt: 15,
           }}
         >
           <CssBaseline />
@@ -139,8 +150,13 @@ const ContactForm = () => {
                   <Box
                     display="flex"
                     flexDirection="column"
-                    alignItems="flex-end"
+                    alignItems="flex-start"
                   >
+                    {nameError && (
+                      <Typography color="error" variant="caption">
+                        Name is required.
+                      </Typography>
+                    )}
                     <NameField
                       name={name}
                       handleNameChange={handleNameChange}
@@ -152,8 +168,13 @@ const ContactForm = () => {
                   <Box
                     display="flex"
                     flexDirection="column"
-                    alignItems="flex-end"
+                    alignItems="flex-start"
                   >
+                    {messageError && (
+                      <Typography color="error" variant="caption">
+                        Message is required.
+                      </Typography>
+                    )}
                     <MessageField
                       message={message}
                       handleMessageChange={handleMessageChange}
@@ -162,6 +183,11 @@ const ContactForm = () => {
                   </Box>
                 </Grid>
                 <Grid item xs={12}>
+                  {countryError && (
+                    <Typography color="error" variant="caption">
+                      Country is required.
+                    </Typography>
+                  )}
                   <CountrySelect
                     countries={countries}
                     country={country}
@@ -169,6 +195,11 @@ const ContactForm = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
+                  {genderError && (
+                    <Typography color="error" variant="caption">
+                      Gender is required.
+                    </Typography>
+                  )}
                   <GenderRadioGroup
                     gender={gender}
                     handleGenderChange={handleGenderChange}
