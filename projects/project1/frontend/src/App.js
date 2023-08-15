@@ -40,22 +40,96 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider value={{ context, setContext }}>
-        <Header
-          headerName="Contact Form Management System"
-          context={context}
-          toggleDarkMode={toggleDarkMode}
-        />
+        {/* context is the value of the context provider, setContext is the function to update the context */}
         <Routes>
           <Route path="/" element={<Navigate to="/contact" />} />
           <Route path="/contact" element={<ContactFormPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/messages" element={<MessagesPage />} />
-          <Route path="/users" element={<UsersPage />} />
-          <Route path="/reports" element={<ReportsPage />} />
+          <Route
+            path="/messages"
+            element={
+              <>
+                {" "}
+                <Header
+                  headerName="Contact Form Management System"
+                  context={context}
+                  toggleDarkMode={toggleDarkMode}
+                />
+                <MessagesPage />
+              </>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <>
+                {" "}
+                <Header
+                  headerName="Contact Form Management System"
+                  context={context}
+                  toggleDarkMode={toggleDarkMode}
+                />
+                <UsersPage />
+              </>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <>
+                {" "}
+                <Header
+                  headerName="Contact Form Management System"
+                  context={context}
+                  toggleDarkMode={toggleDarkMode}
+                />
+                <ReportsPage />
+              </>
+            }
+          />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
-          <Route path="/messages/:id" element={<MessagesDetailPage />} />
-          <Route path="/users/:id" element={<UsersDetailPage />} />
-          <Route path="/add-user" element={<AddUserPage />} />
+          <Route
+            path="/messages/:id"
+            element={
+              <>
+                {" "}
+                <Header
+                  headerName="Contact Form Management System"
+                  context={context}
+                  toggleDarkMode={toggleDarkMode}
+                />
+                <MessagesDetailPage />
+              </>
+            }
+          />
+          <Route
+            path="/users/:id"
+            element={
+              <>
+                {" "}
+                <Header
+                  headerName="Contact Form Management System"
+                  context={context}
+                  toggleDarkMode={toggleDarkMode}
+                />
+                <UsersDetailPage />
+              </>
+            }
+          />
+          <Route
+            path="/add-user"
+            element={
+              <>
+                {" "}
+                <Header
+                  headerName="Contact Form Management System"
+                  context={context}
+                  toggleDarkMode={toggleDarkMode}
+                />
+                <AddUserPage />
+              </>
+            }
+          />
           <Route path="/*" element={<NotFoundPage />} />{" "}
         </Routes>
       </AuthProvider>

@@ -37,8 +37,8 @@ const Header = ({ headerName, context, toggleDarkMode }) => {
   };
 
   const handleLogout = () => {
-    logout();
     navigate("/login");
+    logout();
   };
 
   const handleDarkModeToggle = () => {
@@ -47,10 +47,6 @@ const Header = ({ headerName, context, toggleDarkMode }) => {
     localStorage.setItem("darkMode", newDarkMode);
     toggleDarkMode(); // Call the function passed from the parent component
   };
-
-  useEffect(() => {
-    // No need for document.body.setAttribute("data-theme", theme) anymore
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
