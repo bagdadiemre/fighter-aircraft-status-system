@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../services/authApi";
 import {
@@ -9,18 +9,21 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Switch,
   ThemeProvider,
   createTheme,
   CssBaseline,
+  Switch,
 } from "@mui/material";
+import { useTranslation } from "react-i18next"; // Import the translation hook
+import i18n from "../../i18n/i18n"; // Import the i18next instance
 
-const Header = ({ headerName, context, toggleDarkMode }) => {
+const Header = ({ context, toggleDarkMode }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
   );
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Initialize the translation hook
 
   const theme = createTheme({
     palette: {
@@ -45,35 +48,31 @@ const Header = ({ headerName, context, toggleDarkMode }) => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     localStorage.setItem("darkMode", newDarkMode);
-    toggleDarkMode(); // Call the function passed from the parent component
+    toggleDarkMode();
+  };
+
+  const handleLanguageChange = (language) => {
+    i18n.changeLanguage(language);
   };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar
-        position="static"
-        sx={{
-          borderRadius: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        <Toolbar sx={{ backgroundColor: "#006d77", borderRadius: "10px" }}>
+      <AppBar position="static">
+        <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {headerName}
+            {t("headerName")}
           </Typography>
           {context?.role === "admin" && (
             <div>
-              {headerName !== "Messages Page" && (
-                <Button color="inherit" component={Link} to="/messages">
-                  Messages
-                </Button>
-              )}
+              <Button color="inherit" component={Link} to="/messages">
+                {t("messages")}
+              </Button>
               <Button color="inherit" component={Link} to="/users">
-                Users
+                {t("users")}
               </Button>
               <Button color="inherit" component={Link} to="/reports">
-                Reports
+                {t("reports")}
               </Button>
             </div>
           )}
@@ -100,9 +99,19 @@ const Header = ({ headerName, context, toggleDarkMode }) => {
                   onChange={handleDarkModeToggle}
                   color="primary"
                 />
-                Dark Mode
+                {t("darkMode")}
               </MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleLogout}>{t("logout")}</MenuItem>
+              {/* Language Selection Dropdown */}
+              <MenuItem>
+                <select
+                  value={i18n.language}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                >
+                  <option value="en">English</option>
+                  <option value="tr">Turkish</option>
+                </select>
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>
