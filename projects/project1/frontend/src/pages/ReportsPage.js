@@ -98,7 +98,6 @@ const ReportsPage = () => {
 
   return (
     <div>
-      <Header headerName={"Reports Page"} context={context} />
       {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
       {context?.role === "admin" && (
         <div>

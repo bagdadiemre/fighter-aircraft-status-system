@@ -131,7 +131,6 @@ const UsersDetailPage = () => {
       {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
       {context?.role === "admin" && (
         <div>
-          <Header headerName={"Users Detail Page"} context={context} />
 
           <Container
             maxWidth="sm"

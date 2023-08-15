@@ -45,7 +45,6 @@ const UsersPage = () => {
 
       {context?.role === "admin" && (
         <div>
-          <Header headerName={"Users Page"} context={context} />
           {/* Conditional check before rendering UsersTable */}
           <UsersTable users={users} />
         </div>

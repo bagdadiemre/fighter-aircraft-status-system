@@ -26,7 +26,6 @@ const MessagesPage = () => {
 
   return (
     <div>
-      <Header headerName={"Messages Page"} context={context} />
       <Container>
         <MessagesTable />
       </Container>

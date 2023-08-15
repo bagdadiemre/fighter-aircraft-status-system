@@ -75,7 +75,6 @@ const UsersAddPage = () => {
 
   return (
     <>
-      <Header headerName={"Users Add Page"} context={context} />
 
       <Container maxWidth="sm" sx={{ mt: 10 }}>
         <Card>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../services/authApi";
 import {
@@ -11,15 +11,22 @@ import {
   MenuItem,
   Switch,
   ThemeProvider,
+  createTheme,
+  CssBaseline,
 } from "@mui/material";
-import { lightTheme, darkTheme } from "../../theme/theme"; // Import your themes
 
-const Header = ({ headerName, context }) => {
+const Header = ({ headerName, context, toggleDarkMode }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
   );
   const navigate = useNavigate();
+
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+    },
+  });
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,6 +45,7 @@ const Header = ({ headerName, context }) => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     localStorage.setItem("darkMode", newDarkMode);
+    toggleDarkMode(); // Call the function passed from the parent component
   };
 
   useEffect(() => {
@@ -45,7 +53,8 @@ const Header = ({ headerName, context }) => {
   }, []);
 
   return (
-    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <AppBar
         position="static"
         sx={{

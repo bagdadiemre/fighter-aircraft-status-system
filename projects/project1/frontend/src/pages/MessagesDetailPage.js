@@ -90,7 +90,6 @@ const MessageDetailsPage = () => {
 
   return (
     <>
-      <Header headerName={"Messages Page"} context={context} />
       <div
         style={{
           display: "flex",

@@ -34,46 +34,35 @@ const MessagesTable = () => {
     <TableContainer component={Paper} sx={{ mt: 5, userSelect: "none", mb: 5 }}>
       <Table>
         <TableHead
-          sx={{
-            backgroundColor: "#83c5be", // Custom background color
-          }}
+        // sx={{
+        //   backgroundColor: "#83c5be", // Custom background color
+        // }}
         >
           <TableRow>
-            <TableCell
-              sx={{ fontSize: "17px", width: "16%", color: "#ffffff" }}
-            >
-              Name
-            </TableCell>
-            <TableCell
-              sx={{ fontSize: "17px", width: "32%", color: "#ffffff" }}
-            >
+            <TableCell sx={{ fontSize: "17px", width: "16%" }}>Name</TableCell>
+            <TableCell sx={{ fontSize: "17px", width: "32%" }}>
               Message
             </TableCell>
-            <TableCell
-              sx={{ fontSize: "17px", width: "16%", color: "#ffffff" }}
-            >
+            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
               Gender
             </TableCell>
-            <TableCell
-              sx={{ fontSize: "17px", width: "16%", color: "#ffffff" }}
-            >
+            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
               Country
             </TableCell>
-            <TableCell
-              sx={{ fontSize: "17px", width: "4%", color: "#ffffff" }}
-            ></TableCell>
+            <TableCell sx={{ fontSize: "17px", width: "4%" }}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {messages.map((message) => (
             <TableRow
               key={message.id}
-              sx={{
-                backgroundColor: message.read === "true" ? "white" : "#edf6f9",
-                "&:hover": {
-                  backgroundColor: "#f5f3f4",
-                },
-              }}
+              // TODO add here a symbol instead of color
+              // sx={{
+              //   backgroundColor: message.read === "true" ? "white" : "#edf6f9",
+              //   // "&:hover": {
+              //   //   backgroundColor: "#f5f3f4",
+              //   // },
+              // }}
             >
               <TableCell sx={{ fontSize: "16px", width: "16%" }}>
                 {message.name}
