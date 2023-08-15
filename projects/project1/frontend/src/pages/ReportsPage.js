@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { checkLogin } from "../services/authApi";
 import { getMessages } from "../services/messagesApi"; // Assuming you have a messagesApi module
 import { Bar, Pie } from "react-chartjs-2";
-import { Grid, Paper } from "@mui/material"; // Importing Grid and Paper from Material-UI
+import { Grid, Paper, Typography } from "@mui/material"; // Importing Grid and Paper from Material-UI
 import Chart from "chart.js/auto";
+import Header from "../components/Common/Header";
 
 const ReportsPage = () => {
   const { context, setContext } = useContext(AuthContext);
@@ -20,6 +21,8 @@ const ReportsPage = () => {
         setContext(data.data.user);
       } catch (error) {
         console.error(error);
+
+        navigate("/unauthorized");
       }
     };
 
@@ -95,39 +98,87 @@ const ReportsPage = () => {
 
   return (
     <div>
-      {context?.role !== "admin" && <div>{navigate("./unauthorized")}</div>}
+      <Header headerName={"Reports Page"} context={context} />
+      {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
       {context?.role === "admin" && (
         <div>
-          <h2>Reports Page</h2>
           {messageData && (
             <div>
-              <Grid container spacing={2} justifyContent="center">
-                <Grid item xs={12} md={6}>
+              <Grid
+                container
+                sx={{
+                  mt: 5,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <Paper
                     sx={{
                       p: 2,
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      height: "100%",
+                      height: "70%",
+                      width: "70%",
                     }}
                   >
-                    <h3>Message Count by Country</h3>
-                    <Bar data={generateCountryChartData()} />
+                    <Typography variant="h6" gutterBottom component="div">
+                      Message Count by Country
+                    </Typography>
+                    <Bar
+                      data={generateCountryChartData()}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: true, // Set to false to allow adjusting the size
+                        aspectRatio: 1.2, // Adjust the aspect ratio to control the size
+                        height: "50%",
+                      }}
+                    />
                   </Paper>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <Paper
                     sx={{
                       p: 2,
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      height: "100%",
+                      width: "70%",
+                      height: "70%",
                     }}
                   >
-                    <h3>Message Count by Gender</h3>
-                    <Pie data={generateGenderChartData()} />
+                    <Typography variant="h6" gutterBottom component="div">
+                      Message Count by Gender
+                    </Typography>
+                    <Pie
+                      data={generateGenderChartData()}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: true, // Set to false to allow adjusting the size
+                        aspectRatio: 1.2, // Adjust the aspect ratio to control the size
+                        height: "50%",
+                      }}
+                    />
                   </Paper>
                 </Grid>
               </Grid>
