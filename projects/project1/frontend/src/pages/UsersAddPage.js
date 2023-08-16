@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { checkLogin } from "../services/authApi";
 import { addNewUserWithReaderRole } from "../services/usersApi";
-import Header from "../components/Common/Header";
-
+import { useTranslation } from "react-i18next";
 import {
   Avatar,
   Card,
@@ -25,6 +24,7 @@ const UsersAddPage = () => {
   const [password, setPassword] = useState("");
   const [base64Photo, setBase64Photo] = useState("");
   const [imageFile, setImageFile] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleCheckLogin = async () => {
@@ -75,7 +75,6 @@ const UsersAddPage = () => {
 
   return (
     <>
-
       <Container maxWidth="sm" sx={{ mt: 10 }}>
         <Card>
           <CardHeader
@@ -116,21 +115,21 @@ const UsersAddPage = () => {
               </div>
             }
             titleTypographyProps={{ variant: "h6" }}
-            title={`User: ${username}`}
+            title={`${t("UserAddPage.username")}: ${username}`}
             subheaderTypographyProps={{ variant: "subtitle1" }}
-            subheader={`Role: Reader`}
+            subheader={`${t("UserAddPage.role")}: ${t("UserAddPage.reader")}`}
           />
 
           <CardContent>
             <TextField
-              label="Username"
+              label={t("UserAddPage.username")}
               fullWidth
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               sx={{ mb: 2 }}
             />
             <TextField
-              label="Password"
+              label={t("UserAddPage.password")}
               type="password"
               fullWidth
               value={password}
@@ -149,7 +148,7 @@ const UsersAddPage = () => {
           </CardContent>
           <CardActions sx={{ ml: 1, mb: 1 }}>
             <Button variant="contained" color="primary" onClick={handleAddUser}>
-              Add User
+            {t("UserAddPage.addUser")}
             </Button>
           </CardActions>
         </Card>

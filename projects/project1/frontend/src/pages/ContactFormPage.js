@@ -15,6 +15,7 @@ import { GenderRadioGroup } from "../components/ContactFormPage";
 import { Snackbar, Alert } from "@mui/material"; // Import Snackbar and Alert
 import { addNewMessage } from "../services/messagesApi";
 import { getCountries } from "../services/countriesApi";
+import { useTranslation } from "react-i18next"; // Import the translation hook
 
 const ContactForm = () => {
   const [name, setName] = useState("");
@@ -28,6 +29,7 @@ const ContactForm = () => {
   const [messageError, setMessageError] = useState(false);
   const [countryError, setCountryError] = useState(false);
   const [genderError, setGenderError] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchCountries();
@@ -38,7 +40,8 @@ const ContactForm = () => {
       const response = await getCountries();
       setCountries(response.data.countries);
     } catch (error) {
-      setError("Failed to fetch countries.");
+      const errorMessage = t("ContactForm.fetchCountriesError");
+      setError(errorMessage);
     }
   };
 
@@ -50,25 +53,29 @@ const ContactForm = () => {
     setMessageError(false);
 
     if (!name) {
-      setError("Name is required.");
+      const errorMessage = t("ContactForm.nameRequiredError");
+      setError(errorMessage);
       setNameError(true);
       return;
     }
 
     if (!message) {
-      setError("Message is required.");
+      const errorMessage = t("ContactForm.messageRequiredError");
+      setError(errorMessage);
       setMessageError(true);
       return;
     }
 
     if (!country) {
-      setError("Country is required.");
+      const errorMessage = t("ContactForm.countryRequiredError");
+      setError(errorMessage);
       setCountryError(true);
       return;
     }
 
     if (!gender) {
-      setError("Gender is required.");
+      const errorMessage = t("ContactForm.genderRequiredError");
+      setError(errorMessage);
       setGenderError(true);
       return;
     }
@@ -89,9 +96,11 @@ const ContactForm = () => {
       setMessage("");
       setGender("");
       setCountry("");
-      setSuccessMessage("Form submitted successfully!");
+      const successMessage = t("ContactForm.formSubmittedSuccessfully");
+      setSuccessMessage(successMessage);
     } catch (error) {
-      setError("Failed to submit the form. Please try again.");
+      const errorMessage = t("ContactForm.formSubmissionError");
+      setError(errorMessage);
     }
   };
 
@@ -142,7 +151,7 @@ const ContactForm = () => {
           <CssBaseline />
           <div>
             <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-              Contact Form
+              {t("ContactForm.contactFormTitle")}
             </Typography>
             <form onSubmit={handleFormSubmit}>
               <Grid container spacing={1}>
@@ -154,10 +163,10 @@ const ContactForm = () => {
                   >
                     {nameError && (
                       <Typography color="error" variant="caption">
-                        Name is required.
+                        {t("ContactForm.nameRequiredError")}
                       </Typography>
                     )}
-                    <NameField
+                    <NameField                  
                       name={name}
                       handleNameChange={handleNameChange}
                       nameError={nameError}
@@ -172,7 +181,7 @@ const ContactForm = () => {
                   >
                     {messageError && (
                       <Typography color="error" variant="caption">
-                        Message is required.
+                        {t("ContactForm.messageRequiredError")}
                       </Typography>
                     )}
                     <MessageField
@@ -185,7 +194,7 @@ const ContactForm = () => {
                 <Grid item xs={12}>
                   {countryError && (
                     <Typography color="error" variant="caption">
-                      Country is required.
+                      {t("ContactForm.countryRequiredError")}
                     </Typography>
                   )}
                   <CountrySelect
@@ -197,7 +206,7 @@ const ContactForm = () => {
                 <Grid item xs={12}>
                   {genderError && (
                     <Typography color="error" variant="caption">
-                      Gender is required.
+                      {t("ContactForm.genderRequiredError")}
                     </Typography>
                   )}
                   <GenderRadioGroup
@@ -212,7 +221,7 @@ const ContactForm = () => {
                     variant="contained"
                     color="primary"
                   >
-                    Submit
+                    {t("ContactForm.submit")}
                   </Button>
                 </Grid>
               </Grid>

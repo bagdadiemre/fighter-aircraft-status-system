@@ -53,6 +53,7 @@ const Header = ({ context, toggleDarkMode }) => {
 
   const handleLanguageChange = (language) => {
     i18n.changeLanguage(language);
+    localStorage.setItem("language", language);
   };
 
   return (
@@ -61,18 +62,18 @@ const Header = ({ context, toggleDarkMode }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {t("headerName")}
+            {t("Header.headerName")}
           </Typography>
           {context?.role === "admin" && (
             <div>
               <Button color="inherit" component={Link} to="/messages">
-                {t("messages")}
+                {t('Header.messages')}
               </Button>
               <Button color="inherit" component={Link} to="/users">
-                {t("users")}
+                {t("Header.users")}
               </Button>
               <Button color="inherit" component={Link} to="/reports">
-                {t("reports")}
+                {t("Header.reports")}
               </Button>
             </div>
           )}
@@ -99,17 +100,17 @@ const Header = ({ context, toggleDarkMode }) => {
                   onChange={handleDarkModeToggle}
                   color="primary"
                 />
-                {t("darkMode")}
+                {t("Header.darkMode")}
               </MenuItem>
-              <MenuItem onClick={handleLogout}>{t("logout")}</MenuItem>
+              <MenuItem onClick={handleLogout}>{t("Header.logout")}</MenuItem>
               {/* Language Selection Dropdown */}
               <MenuItem>
                 <select
                   value={i18n.language}
                   onChange={(e) => handleLanguageChange(e.target.value)}
                 >
-                  <option value="en">English</option>
-                  <option value="tr">Turkish</option>
+                  <option value="en">{t("Header.english")}</option>
+                  <option value="tr">{t("Header.turkish")}</option>
                 </select>
               </MenuItem>
             </Menu>

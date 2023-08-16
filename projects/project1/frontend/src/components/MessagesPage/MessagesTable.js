@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getMessages } from "../../services/messagesApi";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   Table,
   TableContainer,
@@ -16,6 +17,7 @@ import { ArrowForward } from "@mui/icons-material"; // Import the icon you want 
 
 const MessagesTable = () => {
   const [messages, setMessages] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -39,15 +41,17 @@ const MessagesTable = () => {
         // }}
         >
           <TableRow>
-            <TableCell sx={{ fontSize: "17px", width: "16%" }}>Name</TableCell>
+            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
+              {t("MessagesPage.name")}
+            </TableCell>
             <TableCell sx={{ fontSize: "17px", width: "32%" }}>
-              Message
+              {t("MessagesPage.message")}
             </TableCell>
             <TableCell sx={{ fontSize: "17px", width: "16%" }}>
-              Gender
+              {t("MessagesPage.gender")}
             </TableCell>
             <TableCell sx={{ fontSize: "17px", width: "16%" }}>
-              Country
+              {t("MessagesPage.country")}
             </TableCell>
             <TableCell sx={{ fontSize: "17px", width: "4%" }}></TableCell>
           </TableRow>
@@ -80,7 +84,7 @@ const MessagesTable = () => {
                 </Tooltip>
               </TableCell>
               <TableCell sx={{ fontSize: "16px", width: "16%" }}>
-                {message.gender}
+               {t(`MessagesPage.${message.gender}`)}
               </TableCell>
               <TableCell sx={{ fontSize: "16px", width: "16%" }}>
                 {message.country}

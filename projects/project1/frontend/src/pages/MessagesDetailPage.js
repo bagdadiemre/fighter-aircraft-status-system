@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { checkLogin } from "../services/authApi";
 import { useNavigate, useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   getMessageById,
   deleteMessageById,
@@ -24,6 +25,7 @@ const MessageDetailsPage = () => {
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchMessageDetails = async () => {
@@ -35,7 +37,8 @@ const MessageDetailsPage = () => {
           await readMessageById(id);
         }
       } catch (error) {
-        setError("Error fetching message details.");
+        const errorMsg = t("MessagesDetailPage.messageDetails");
+        setError(errorMsg);
       }
     };
 
@@ -72,7 +75,8 @@ const MessageDetailsPage = () => {
       await deleteMessageById(id);
       navigate("/messages");
     } catch (error) {
-      setError("Error deleting message.");
+      const errorMsg = t("MessagesDetailPage.deleteMessageError");
+      setError(errorMsg);
     }
   };
 
@@ -105,18 +109,13 @@ const MessageDetailsPage = () => {
             maxWidth: 300,
             width: "100%",
             margin: "auto", // Center the card
-            backgroundColor: "#fbfdfd ", // Light gray background
             borderRadius: 8, // Rounded corners
             boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
             border: "2px solid #83c5be", // Border with specified color
           }}
         >
-          <Typography
-            variant="h5"
-            gutterBottom
-            style={{ color: "#333", fontSize: "1.7rem" }}
-          >
-            Message Details
+          <Typography variant="h5" gutterBottom style={{ fontSize: "1.7rem" }}>
+            {t("MessagesDetailPage.messageDetails")}
           </Typography>
           <div
             style={{
@@ -124,33 +123,19 @@ const MessageDetailsPage = () => {
               marginBottom: "10px",
             }}
           ></div>
-          <Typography
-            variant="body1"
-            sx={{ margin: "8px 0" }}
-            style={{ color: "#555" }}
-          >
-            <strong>Name:</strong> {message.name}
+          <Typography variant="body1" sx={{ margin: "8px 0" }}>
+            <strong>{t("MessagesDetailPage.name")}:</strong> {message.name}
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{ margin: "8px 0" }}
-            style={{ color: "#555" }}
-          >
-            <strong>Message:</strong> {message.message}
+          <Typography variant="body1" sx={{ margin: "8px 0" }}>
+            <strong>{t("MessagesDetailPage.message")}:</strong>{" "}
+            {message.message}
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{ margin: "8px 0" }}
-            style={{ color: "#555" }}
-          >
-            <strong>Gender:</strong> {message.gender}
+          <Typography variant="body1" sx={{ margin: "8px 0" }}>
+            <strong>{t("MessagesDetailPage.gender")}:</strong> {message.gender}
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{ margin: "8px 0" }}
-            style={{ color: "#555" }}
-          >
-            <strong>Country:</strong> {message.country}
+          <Typography variant="body1" sx={{ margin: "8px 0" }}>
+            <strong>{t("MessagesDetailPage.country")}:</strong>{" "}
+            {message.country}
           </Typography>
           <Button
             variant="outlined"
@@ -160,14 +145,9 @@ const MessageDetailsPage = () => {
             sx={{
               mt: 3,
               mr: 2,
-              color: "#006d77",
-              borderColor: "#006d77",
-              "&:hover": {
-                borderColor: "#006d77", // Set hover border color
-              },
-            }} // Added color and borderColor
+            }}
           >
-            Homepage
+            {t("MessagesDetailPage.homepage")}
           </Button>
 
           {context?.role === "admin" && (
@@ -178,7 +158,7 @@ const MessageDetailsPage = () => {
                 onClick={handleDeleteConfirmation}
                 sx={{ mt: 3 }}
               >
-                Delete
+                {t("MessagesDetailPage.delete")}
               </Button>
               <Dialog
                 open={showDeleteConfirmation}
@@ -191,30 +171,20 @@ const MessageDetailsPage = () => {
                   },
                 }}
               >
-                <DialogTitle style={{ color: "#006d77" }}>
-                  Confirm Deletion
-                </DialogTitle>
+                <DialogTitle>{t("MessagesDetailPage.confirmDeletion")}</DialogTitle>
                 <DialogContent>
-                  <Typography variant="body1" style={{ color: "#333" }}>
-                    <strong>Name:</strong> {message.name}
+                  <Typography variant="body1">
+                    <strong>{t("MessagesDetailPage.name")}:</strong> {message.name}
                   </Typography>
-                  <Typography variant="body1" style={{ color: "#333" }}>
-                    <strong>Message:</strong> {message.message}
+                  <Typography variant="body1" s>
+                    <strong>{t("MessagesDetailPage.message")}:</strong> {message.message}
                   </Typography>
                 </DialogContent>
                 <DialogActions>
-                  <Button
-                    onClick={handleConfirmedDelete}
-                    style={{ color: "#FF5722" }}
-                  >
-                    Confirm Delete
+                  <Button onClick={handleConfirmedDelete}>
+                  {t("MessagesDetailPage.delete")}
                   </Button>
-                  <Button
-                    onClick={handleCancelDelete}
-                    style={{ color: "#006d77" }}
-                  >
-                    Cancel
-                  </Button>
+                  <Button onClick={handleCancelDelete}>{t("MessagesDetailPage.cancel")}</Button>
                 </DialogActions>
               </Dialog>
             </>

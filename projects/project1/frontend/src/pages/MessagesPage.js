@@ -27,6 +27,7 @@ const MessagesPage = () => {
   return (
     <div>
       <Container>
+        
         <MessagesTable />
       </Container>
     </div>

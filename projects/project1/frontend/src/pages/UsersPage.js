@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Common/Header";
 import UsersTable from "../components/UsersPage/UsersTable";
 import { checkLogin } from "../services/authApi";
 import { getUsers } from "../services/usersApi";

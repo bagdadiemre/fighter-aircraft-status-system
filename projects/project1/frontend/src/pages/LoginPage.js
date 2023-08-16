@@ -9,10 +9,11 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { login } from "../services/authApi";
+import { useTranslation } from "react-i18next"; // Import the translation hook
 
 const LoginPage = () => {
-  const {  setContext } = useContext(AuthContext);
-
+  const { setContext } = useContext(AuthContext);
+  const { t } = useTranslation(); // Initialize the translation hook
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +23,8 @@ const LoginPage = () => {
   const handleLogin = async () => {
     try {
       if (!username || !password) {
-        setError("Username and password are required");
+        const errorStr = t("Login.usernameAndPasswordAreRequired");
+        setError(errorStr);
         setOpenSnackbar(true);
         return;
       }
@@ -34,7 +36,8 @@ const LoginPage = () => {
 
       navigate("/messages"); // Redirect to MessagesPage
     } catch (error) {
-      setError("Invalid credentials");
+      const errorStr = t("Login.invalidCredentials");
+      setError(errorStr);
       setOpenSnackbar(true);
       console.error("Login failed:", error);
     }
@@ -57,10 +60,10 @@ const LoginPage = () => {
         }}
       >
         <Typography variant="h4" gutterBottom>
-          Login
+          {t("Login.login")}
         </Typography>
         <TextField
-          label="Username"
+          label={t("Login.username")}
           variant="outlined"
           margin="normal"
           fullWidth
@@ -68,7 +71,7 @@ const LoginPage = () => {
           onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
-          label="Password"
+          label={t("Login.password")}
           variant="outlined"
           margin="normal"
           fullWidth
@@ -83,7 +86,7 @@ const LoginPage = () => {
           fullWidth
           sx={{ mt: 3 }}
         >
-          Login
+          {t("Login.login")}
         </Button>
       </Paper>
       <Snackbar

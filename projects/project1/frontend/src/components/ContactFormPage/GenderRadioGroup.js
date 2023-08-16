@@ -1,7 +1,9 @@
 import React from "react";
 import { Radio, RadioGroup, FormControlLabel } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const GenderRadioGroup = ({ gender, handleGenderChange }) => {
+  const { t } = useTranslation();
   return (
     <RadioGroup
       aria-label="gender"
@@ -13,12 +15,12 @@ const GenderRadioGroup = ({ gender, handleGenderChange }) => {
       <FormControlLabel
         value="male"
         control={<Radio color="primary" />}
-        label="Male"
+        label={t("ContactForm.male")}
       />
       <FormControlLabel
         value="female"
         control={<Radio color="primary" />}
-        label="Female"
+        label={t("ContactForm.female")}
       />
     </RadioGroup>
   );

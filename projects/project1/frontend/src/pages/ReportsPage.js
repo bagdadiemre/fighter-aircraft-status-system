@@ -6,13 +6,13 @@ import { getMessages } from "../services/messagesApi"; // Assuming you have a me
 import { Bar, Pie } from "react-chartjs-2";
 import { Grid, Paper, Typography } from "@mui/material"; // Importing Grid and Paper from Material-UI
 import Chart from "chart.js/auto";
-import Header from "../components/Common/Header";
+import { useTranslation } from "react-i18next";
 
 const ReportsPage = () => {
   const { context, setContext } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [messageData, setMessageData] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleCheckLogin = async () => {
@@ -62,7 +62,7 @@ const ReportsPage = () => {
       labels: Object.keys(sortedCountryCounts),
       datasets: [
         {
-          label: "Message Count by Country",
+          label: t("ReportsPage.chart1"),
           data: Object.values(sortedCountryCounts),
           backgroundColor: "rgba(75,192,192,0.6)",
         },
@@ -81,15 +81,19 @@ const ReportsPage = () => {
       genderCounts[gender]++;
     });
 
+    const localizedLabels = Object.keys(genderCounts).map((key) =>
+      t(`ReportsPage.${key}`)
+    );
+
     return {
-      labels: Object.keys(genderCounts),
+      labels: localizedLabels,
       datasets: [
         {
-          label: "Message Count by Gender",
+          label: t("ReportsPage.chart2"),
           data: Object.values(genderCounts),
           backgroundColor: [
-            "rgba(255, 99, 132, 0.6)",
             "rgba(54, 162, 235, 0.6)",
+            "rgba(255, 99, 132, 0.6)",
           ],
         },
       ],
@@ -133,7 +137,7 @@ const ReportsPage = () => {
                     }}
                   >
                     <Typography variant="h6" gutterBottom component="div">
-                      Message Count by Country
+                      {t("ReportsPage.chart1")}
                     </Typography>
                     <Bar
                       data={generateCountryChartData()}
@@ -167,7 +171,7 @@ const ReportsPage = () => {
                     }}
                   >
                     <Typography variant="h6" gutterBottom component="div">
-                      Message Count by Gender
+                      {t("ReportsPage.chart2")}
                     </Typography>
                     <Pie
                       data={generateGenderChartData()}

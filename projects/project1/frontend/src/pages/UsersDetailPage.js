@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { checkLogin } from "../services/authApi";
-import Header from "../components/Common/Header";
+import { useTranslation } from "react-i18next";
 
 import {
   Avatar,
@@ -35,9 +35,9 @@ const UsersDetailPage = () => {
     base64Photo: "",
     isDirty: false,
   });
-  const [imageFile, setImageFile] = useState(null);
   const [successOpen, setSuccessOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -73,7 +73,6 @@ const UsersDetailPage = () => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file && editing) {
-      setImageFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         const base64Image = `data:${file.type};base64,${
@@ -131,7 +130,6 @@ const UsersDetailPage = () => {
       {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
       {context?.role === "admin" && (
         <div>
-
           <Container
             maxWidth="sm"
             sx={{
@@ -183,9 +181,9 @@ const UsersDetailPage = () => {
                   </label>
                 }
                 titleTypographyProps={{ variant: "h6" }}
-                title={`Username: ${user.username}`}
+                title={`${t("UsersDetailPage.username")}: ${user.username}`}
                 subheaderTypographyProps={{ variant: "subtitle1" }}
-                subheader={`Role: ${user.role}`}
+                subheader={`${t("UsersDetailPage.role")}:  ${t(`UsersDetailPage.${user.role}`)}`}
               />
 
               <CardActions sx={{ ml: 1, mb: 1 }}>
@@ -196,7 +194,9 @@ const UsersDetailPage = () => {
                     color="primary"
                     style={{ backgroundColor: "#006d77", color: "white" }}
                   >
-                    {editing ? "Cancel" : "Edit"}
+                    {editing
+                      ? t("UsersDetailPage.cancel")
+                      : t("UsersDetailPage.edit")}
                   </Button>
                 )}
                 {editing && (
@@ -209,7 +209,7 @@ const UsersDetailPage = () => {
                     }}
                     disabled={!editedUser.isDirty}
                   >
-                    Save
+                    {t("UsersDetailPage.save")}
                   </Button>
                 )}
                 {editing && (
@@ -227,7 +227,7 @@ const UsersDetailPage = () => {
               <Collapse in={editing}>
                 <CardContent>
                   <TextField
-                    label="Password"
+                    label={t("UsersDetailPage.password")}
                     fullWidth
                     value={editedUser.password}
                     type={showPassword ? "text" : "password"}
