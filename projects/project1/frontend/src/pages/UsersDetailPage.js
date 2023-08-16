@@ -161,7 +161,6 @@ const UsersDetailPage = () => {
                           position: "absolute",
                           bottom: 0,
                           right: 0,
-                          backgroundColor: "white",
                           borderRadius: "50%",
                           padding: "2px",
                           width: 16,

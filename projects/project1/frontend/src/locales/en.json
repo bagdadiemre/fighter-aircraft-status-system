@@ -13,7 +13,7 @@
   "Login": {
     "login": "Login",
     "usernameAndPasswordAreRequired": "Username and password are required",
-    "invalidCredentials": "Invalid credentials",
+    "invalidCredentials": "Invalid credentials!",
     "username": "Username",
     "password": "Password"
   },
@@ -63,6 +63,17 @@
     "username": "Username",
     "password": "Password",
     "role": "Role",
+    "admin": "Admin",
+    "reader": "Reader"
+  },
+
+  "UsersDetailPage": {
+    "username": "Username",
+    "password": "Password",
+    "role": "Role",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
     "admin": "Admin",
     "reader": "Reader"
   },
