@@ -242,6 +242,26 @@ app.get("/api/messagesPagination", async (req, res) => {
   });
 });
 
+// GET messages by infinite scroll
+app.get("/api/messagesInfiniteScroll", async (req, res) => {
+  const authCheck = await checkTokenAndRole(req, res, ["admin", "reader"]);
+  if (!authCheck) {
+    return;
+  }
+
+  const page = parseInt(req.query.page) || 1; // Get the requested page number from the query parameter
+  const pageSize = 10; // Number of messages to load per page
+  const messages = await readDataFromFile("data/messages.json");
+
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedMessages = messages.slice(startIndex, endIndex);
+
+  const hasMorePages = endIndex < messages.length;
+
+  res.status(200).send({ data: { messages: paginatedMessages, hasMorePages } });
+});
+
 // GET message by id
 app.get("/api/message/:id", async (req, res) => {
   const authCheck = await checkTokenAndRole(req, res, ["admin", "reader"]);

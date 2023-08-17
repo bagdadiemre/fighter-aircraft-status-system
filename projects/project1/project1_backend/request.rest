@@ -1,1 +1,1 @@
-GET http://localhost:5165/api/messagesPagination?page=1&perPage=10&sortBy=gender&sortOrder=desc
+GET http://localhost:5165/api/messagesInfiniteScroll?page=6
