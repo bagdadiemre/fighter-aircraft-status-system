@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { checkLogin } from "../services/authApi";
 import { addNewUserWithReaderRole } from "../services/usersApi";
-import { useTranslation } from "react-i18next";
+
 import {
   Avatar,
   Card,
@@ -12,7 +12,10 @@ import {
   CardHeader,
   Container,
   TextField,
+  Snackbar,
   Button,
+  Typography,
+  Alert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -24,7 +27,11 @@ const UsersAddPage = () => {
   const [password, setPassword] = useState("");
   const [base64Photo, setBase64Photo] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const { t } = useTranslation();
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [photoError, setPhotoError] = useState(false);
 
   useEffect(() => {
     const handleCheckLogin = async () => {
@@ -56,7 +63,19 @@ const UsersAddPage = () => {
     }
   };
 
+  const getRemainingChars = (currentLength, maxLength) => {
+    return `${currentLength}/${maxLength}`;
+  };
+
   const handleAddUser = async () => {
+    if (!username || !password || !imageFile) {
+      // Set the error states
+      setUsernameError(!username);
+      setPasswordError(!password);
+      setPhotoError(!imageFile);
+      return;
+    }
+
     try {
       const response = await addNewUserWithReaderRole(
         username,
@@ -65,94 +84,204 @@ const UsersAddPage = () => {
       );
       // Handle the successful response here
       console.log("User added successfully:", response);
+      setSuccessOpen(true);
       // Navigate to the "Users Page" after successful user addition
       navigate("/users");
     } catch (error) {
       console.error("Add User failed:", error);
+      setErrorOpen(true);
       // Handle the error here, such as showing an error message to the user
     }
   };
 
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
+
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  };
+
   return (
     <>
-      <Container maxWidth="sm" sx={{ mt: 10 }}>
-        <Card>
-          <CardHeader
-            avatar={
-              <div
-                onClick={() => {
-                  if (imageFile) {
-                    setImageFile(null);
-                    setBase64Photo("");
-                  } else {
-                    document.getElementById("upload-photo").click();
-                  }
-                }}
-                style={{ cursor: "pointer", position: "relative" }}
-              >
-                <Avatar
-                  alt={username}
-                  src={base64Photo}
-                  sx={{ width: 80, height: 80 }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    right: 0,
-                    backgroundColor: "white",
-                    borderRadius: "50%",
-                    padding: "2px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {imageFile ? (
-                    <ClearIcon style={{ fontSize: 18, color: "red" }} />
-                  ) : (
-                    <AddIcon style={{ fontSize: 18, color: "green" }} />
-                  )}
-                </div>
-              </div>
-            }
-            titleTypographyProps={{ variant: "h6" }}
-            title={`${t("UserAddPage.username")}: ${username}`}
-            subheaderTypographyProps={{ variant: "subtitle1" }}
-            subheader={`${t("UserAddPage.role")}: ${t("UserAddPage.reader")}`}
-          />
+      {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
+      {context?.role === "admin" && (
+        <div>
+          <Container
+            maxWidth="xs"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "100vh",
+            }}
+          >
+            <Card
+              sx={{
+                marginBottom: "90px",
+              }}
+            >
+              <CardHeader
+                avatar={
+                  <div
+                    onClick={() => {
+                      if (imageFile) {
+                        setImageFile(null);
+                        setBase64Photo("");
+                      } else {
+                        setPhotoError(false);
+                        document.getElementById("upload-photo").click();
+                      }
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      position: "relative",
+                    }}
+                  >
+                    <Avatar
+                      alt={username}
+                      src={base64Photo}
+                      sx={{
+                        width: 80,
+                        height: 80,
+                        border: photoError
+                          ? "2px solid red"
+                          : "2px solid transparent",
+                      }}
+                    />
 
-          <CardContent>
-            <TextField
-              label={t("UserAddPage.username")}
-              fullWidth
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              label={t("UserAddPage.password")}
-              type="password"
-              fullWidth
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              sx={{ mb: 2 }}
-            />
-            <label htmlFor="upload-photo">
-              <input
-                type="file"
-                id="upload-photo"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleImageUpload}
+                    {imageFile ? (
+                      <ClearIcon
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          right: 0,
+                          backgroundColor: "white",
+                          borderRadius: "50%",
+                          padding: "2px",
+                          cursor: "pointer",
+                          fontSize: 18,
+                          color: "red",
+                        }}
+                      />
+                    ) : (
+                      <AddIcon
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          right: 0,
+                          backgroundColor: "white",
+                          borderRadius: "50%",
+                          padding: "2px",
+                          cursor: "pointer",
+                          fontSize: 18,
+                          color: "red",
+                        }}
+                      />
+                    )}
+                  </div>
+                }
+                titleTypographyProps={{ variant: "h6" }}
+                title={`Username: ${username}`}
+                subheaderTypographyProps={{ variant: "subtitle1" }}
+                subheader={`Role: Reader`}
               />
-            </label>
-          </CardContent>
-          <CardActions sx={{ ml: 1, mb: 1 }}>
-            <Button variant="contained" color="primary" onClick={handleAddUser}>
-            {t("UserAddPage.addUser")}
-            </Button>
-          </CardActions>
-        </Card>
-      </Container>
+
+              <CardContent>
+                <TextField
+                  label="Username"
+                  fullWidth
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setUsernameError(false);
+                  }}
+                  error={usernameError}
+                  helperText={usernameError && "Username is required"}
+                  inputProps={{ maxLength: 10 }}
+                  sx={{
+                    mb: 0,
+                  }}
+                />
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  sx={{ textAlign: "right" }}
+                >
+                  {getRemainingChars(username.length, 10)}
+                </Typography>
+                <TextField
+                  label="Password"
+                  type="password"
+                  fullWidth
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError(false);
+                  }}
+                  error={passwordError}
+                  helperText={passwordError && "Password is required"}
+                  inputProps={{ maxLength: 10 }}
+                  sx={{
+                    mt: 2,
+                  }}
+                />
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  sx={{ textAlign: "right" }}
+                >
+                  {getRemainingChars(password.length, 10)}
+                </Typography>
+                <label htmlFor="upload-photo">
+                  <input
+                    type="file"
+                    id="upload-photo"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                  />
+                </label>
+              </CardContent>
+              <CardActions sx={{ ml: 1, mb: 1 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddUser}
+                >
+                  Add User
+                </Button>
+              </CardActions>
+            </Card>
+            <Snackbar
+              open={successOpen}
+              autoHideDuration={6000}
+              onClose={handleSuccessClose}
+            >
+              <Alert
+                onClose={handleSuccessClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                User added successfully!
+              </Alert>
+            </Snackbar>
+            <Snackbar
+              open={errorOpen}
+              autoHideDuration={6000}
+              onClose={handleErrorClose}
+            >
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                sx={{ width: "100%" }}
+              >
+                Error adding user!
+              </Alert>
+            </Snackbar>
+          </Container>
+        </div>
+      )}
     </>
   );
 };

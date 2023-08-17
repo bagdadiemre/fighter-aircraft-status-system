@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../services/authApi";
+import { logout } from "../services/authApi";
 import {
   AppBar,
   Button,
@@ -12,10 +12,16 @@ import {
   ThemeProvider,
   createTheme,
   CssBaseline,
-  Switch,
+  ListItemText,
+  Select,
+  IconButton,
 } from "@mui/material";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useTranslation } from "react-i18next"; // Import the translation hook
-import i18n from "../../i18n/i18n"; // Import the i18next instance
+import i18n from "../i18n/i18n"; // Import the i18next instance
 
 const Header = ({ context, toggleDarkMode }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -104,24 +110,37 @@ const Header = ({ context, toggleDarkMode }) => {
               onClose={handleMenuClose}
             >
               <MenuItem disabled>{context?.username}</MenuItem>
-              <MenuItem>
-                <Switch
-                  checked={darkMode}
-                  onChange={handleDarkModeToggle}
-                  color="primary"
-                />
+              <MenuItem onClick={handleDarkModeToggle}>
+                <IconButton color="primary" onClick={handleDarkModeToggle}>
+                  {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+                </IconButton>
                 {t("Header.darkMode")}
               </MenuItem>
-              <MenuItem onClick={handleLogout}>{t("Header.logout")}</MenuItem>
-              {/* Language Selection Dropdown */}
+              <MenuItem onClick={handleLogout}>
+                <IconButton color="inherit" onClick={handleLogout}>
+                  <ExitToAppIcon /> {/* Add the Logout icon */}
+                </IconButton>
+                {t("Header.logout")}
+              </MenuItem>
               <MenuItem>
-                <select
-                  value={i18n.language}
-                  onChange={(e) => handleLanguageChange(e.target.value)}
-                >
-                  <option value="en">{t("Header.english")}</option>
-                  <option value="tr">{t("Header.turkish")}</option>
-                </select>
+                <ListItemText
+                  primary={
+                    <Select
+                      value={i18n.language}
+                      onChange={(e) => handleLanguageChange(e.target.value)}
+                      IconComponent={ArrowDropDownIcon}
+                      disableUnderline
+                      style={{ width: "150px", height: "40px" }} // Adjust the width as needed
+                    >
+                      <MenuItem value="en">
+                        <ListItemText primary={t("Header.english")} />
+                      </MenuItem>
+                      <MenuItem value="tr">
+                        <ListItemText primary={t("Header.turkish")} />
+                      </MenuItem>
+                    </Select>
+                  }
+                />
               </MenuItem>
             </Menu>
           </div>

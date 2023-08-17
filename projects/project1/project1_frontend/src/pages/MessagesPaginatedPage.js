@@ -2,10 +2,10 @@ import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { checkLogin } from "../services/authApi";
-import MessagesPaginatedTable from "../components/MessagesPaginatedPage/MessagesPaginatedTable";
+import { MessagesPaginatedTable } from "../components";
 import { Container } from "@mui/material";
 
-const MessagesPage = () => {
+const MessagesPaginatedPage = () => {
   const navigate = useNavigate();
   const { context, setContext } = useContext(AuthContext);
   useEffect(() => {
@@ -32,4 +32,4 @@ const MessagesPage = () => {
   );
 };
 
-export default MessagesPage;
+export default MessagesPaginatedPage;

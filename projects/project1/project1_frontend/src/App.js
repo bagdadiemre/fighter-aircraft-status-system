@@ -15,10 +15,8 @@ import {
   MessagesPaginatedPage,
   MessagesInfiniteScrollPage,
 } from "./pages";
-
 import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
-
-import Header from "./components/Common/Header"; // Update the import path
+import Header from "./components/Header";
 
 const App = () => {
   const [context, setContext] = useState();

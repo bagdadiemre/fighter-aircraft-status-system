@@ -118,7 +118,7 @@ const MessageDetailsPage = () => {
           elevation={3}
           sx={{
             padding: 3,
-            maxWidth: 300,
+            maxWidth: 500,
             width: "100%",
             margin: "auto", // Center the card
             borderRadius: 8, // Rounded corners

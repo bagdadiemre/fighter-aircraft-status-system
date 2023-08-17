@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { checkLogin } from "../services/authApi";
-import MessagesTable from "../components/MessagesPage/MessagesTable";
+import { MessagesTable } from "../components";
 import { Container } from "@mui/material";
 
 const MessagesPage = () => {

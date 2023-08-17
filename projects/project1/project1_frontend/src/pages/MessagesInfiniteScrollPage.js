@@ -2,8 +2,9 @@ import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { checkLogin } from "../services/authApi";
-import MessagesInfiniteScrollTable from "../components/MessagesInfiniteScrollPage/MessagesInfiniteScrollTable";
+import { MessagesInfiniteScrollTable } from "../components";
 import { Container } from "@mui/material";
+
 
 const MessagesInfiniteScrollPage = () => {
   const navigate = useNavigate();

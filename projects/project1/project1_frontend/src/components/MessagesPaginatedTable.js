@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getPaginatedMessages } from "../../services/messagesApi";
+import { getPaginatedMessages } from "../services/messagesApi";
 import {
   Table,
   TableBody,
@@ -16,8 +16,10 @@ import {
 } from "@mui/material";
 import { ArrowForward } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import DoneIcon from "@mui/icons-material/Done";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
-const MessageTable = () => {
+const MessagePaginatedTable = () => {
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -94,10 +96,10 @@ const MessageTable = () => {
                 {t("MessagesPaginatedPage.name")}
               </TableSortLabel>
             </TableCell>
-            <TableCell sx={{ fontSize: "16px", width: "32%" }}>
+            <TableCell sx={{ fontSize: "16px", width: "38%" }}>
               {t("MessagesPaginatedPage.message")}
             </TableCell>
-            <TableCell sx={{ fontSize: "16px", width: "16%" }}>
+            <TableCell sx={{ fontSize: "16px", width: "10%" }}>
               <TableSortLabel
                 active={sortBy === "gender"}
                 direction={sortBy === "gender" ? sortOrder : "asc"}
@@ -152,6 +154,11 @@ const MessageTable = () => {
                 >
                   <ArrowForward />
                 </IconButton>
+                {message.read === "true" ? (
+                  <DoneIcon style={{ color: "green" }} />
+                ) : (
+                  <MailOutlineIcon style={{ color: "blue" }} />
+                )}
               </TableCell>
             </TableRow>
           ))}
@@ -170,4 +177,4 @@ const MessageTable = () => {
   );
 };
 
-export default MessageTable;
+export default MessagePaginatedTable;
