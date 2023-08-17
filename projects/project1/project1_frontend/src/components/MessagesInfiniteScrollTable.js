@@ -106,13 +106,6 @@ const MessagesInfiniteScrollTable = () => {
           {messages.map((message) => (
             <TableRow
               key={message.id}
-              // TODO add here a symbol instead of color
-              // sx={{
-              //   backgroundColor: message.read === "true" ? "white" : "#edf6f9",
-              //   // "&:hover": {
-              //   //   backgroundColor: "#f5f3f4",
-              //   // },
-              // }}
             >
               <TableCell>{message.id}</TableCell>
               <TableCell>{message.name}</TableCell>

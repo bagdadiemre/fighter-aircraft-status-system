@@ -80,7 +80,9 @@
     "delete": "Delete",
     "confirmDeletion": "Are you sure you want to delete this message?",
     "cancel": "Cancel",
-    "creationDate": "Creation Date"
+    "creationDate": "Creation Date",
+    "male": "Male",
+    "female": "Female"
   },
 
   "UsersPage": {

@@ -143,7 +143,8 @@ const MessageDetailsPage = () => {
             {message.message}
           </Typography>
           <Typography variant="body1" sx={{ margin: "8px 0" }}>
-            <strong>{t("MessagesDetailPage.gender")}:</strong> {message.gender}
+            <strong>{t("MessagesDetailPage.gender")}:</strong>{" "}
+            {t(`MessagesDetailPage.${message.gender}`)}
           </Typography>
           <Typography variant="body1" sx={{ margin: "8px 0" }}>
             <strong>{t("MessagesDetailPage.country")}:</strong>{" "}

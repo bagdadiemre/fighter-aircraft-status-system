@@ -80,7 +80,9 @@
     "delete": "Sil",
     "confirmDeletion": "Silmek istediğinize emin misiniz?",
     "cancel": "İptal",
-    "creationDate": "Oluşturulma Tarihi"
+    "creationDate": "Oluşturulma Tarihi",
+    "male": "Erkek",
+    "female": "Kadın"
   },
 
   "UsersPage": {
