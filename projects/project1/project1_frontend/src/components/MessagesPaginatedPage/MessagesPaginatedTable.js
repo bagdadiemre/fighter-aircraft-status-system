@@ -84,6 +84,7 @@ const MessageTable = () => {
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell sx={{ fontSize: "16px", width: "2%" }}>ID</TableCell>
             <TableCell sx={{ fontSize: "16px", width: "16%" }}>
               <TableSortLabel
                 active={sortBy === "name"}
@@ -129,6 +130,7 @@ const MessageTable = () => {
         <TableBody>
           {messages.map((message) => (
             <TableRow key={message.id}>
+              <TableCell>{message.id}</TableCell>
               <TableCell>{message.name}</TableCell>
               <TableCell>
                 <Tooltip title={message.message} arrow>

@@ -9,6 +9,7 @@ import MessagesDetailPage from "./MessagesDetailPage";
 import UsersDetailPage from "./UsersDetailPage";
 import AddUserPage from "./UsersAddPage";
 import MessagesPaginatedPage from "./MessagesPaginatedPage";
+import MessagesInfiniteScrollPage from "./MessagesInfiniteScrollPage";
 
 export {
   ContactFormPage,
@@ -22,4 +23,5 @@ export {
   UsersDetailPage,
   AddUserPage,
   MessagesPaginatedPage,
+  MessagesInfiniteScrollPage,
 };

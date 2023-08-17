@@ -4,7 +4,7 @@
   "Header": {
     "headerName": "Contact Management System",
     "messages": "Messages",
-    "messagesPaginated": "Paginated Messages",
+    "messagesPaginated": "PM",
     "users": "Users",
     "reports": "Reports",
     "darkMode": "Dark Mode",
@@ -56,6 +56,16 @@
     "creationDate": "Creation Date",
     "male": "Male",
     "female": "Female"
+  },
+
+  "MessagesInfiniteScroll": {
+    "name": "Name",
+    "message": "Message",
+    "country": "Country",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "creationDate": "Creation Date"
   },
 
   "MessagesDetailPage": {

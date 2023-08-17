@@ -13,12 +13,12 @@ import {
   UsersDetailPage,
   AddUserPage,
   MessagesPaginatedPage,
+  MessagesInfiniteScrollPage,
 } from "./pages";
 
 import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 
 import Header from "./components/Common/Header"; // Update the import path
-import { Message } from "@mui/icons-material";
 
 const App = () => {
   const [context, setContext] = useState();
@@ -72,6 +72,20 @@ const App = () => {
                   toggleDarkMode={toggleDarkMode}
                 />
                 <MessagesPaginatedPage />
+              </>
+            }
+          />
+          <Route
+            path="/messagesInfiniteScroll"
+            element={
+              <>
+                {" "}
+                <Header
+                  headerName="Contact Form Management System"
+                  context={context}
+                  toggleDarkMode={toggleDarkMode}
+                />
+                <MessagesInfiniteScrollPage />
               </>
             }
           />

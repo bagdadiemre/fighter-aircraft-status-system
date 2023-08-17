@@ -4,7 +4,7 @@
   "Header": {
     "headerName": "İletişim Form Sistemi",
     "messages": "Mesajlar",
-    "messagesPaginated": "Paginated Mesajlar",
+    "messagesPaginated": "PM",
     "users": "Kullanıcılar",
     "reports": "Raporlar",
     "darkMode": "Karanlık Mod",
@@ -56,6 +56,16 @@
     "creationDate": "Oluşturulma Tarihi",
     "male": "Erkek",
     "female": "Kadın"
+  },
+
+  "MessagesInfiniteScroll": {
+    "name": "İsim",
+    "message": "Mesaj",
+    "country": "Ülke",
+    "gender": "Cinsiyet",
+    "male": "Erkek",
+    "female": "Kadın",
+    "creationDate": "Oluşturulma Tarihi"
   },
 
   "MessagesDetailPage": {

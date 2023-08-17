@@ -1,36 +1,64 @@
-import React, { useEffect, useState } from "react";
-import { getMessages } from "../../services/messagesApi";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import {
   Table,
+  TableBody,
+  TableCell,
   TableContainer,
   TableHead,
-  TableBody,
   TableRow,
-  TableCell,
   Paper,
+  CircularProgress,
   IconButton,
   Tooltip,
 } from "@mui/material";
+import { getInfiniteScrollMessages } from "../../services/messagesApi";
+import { useTranslation } from "react-i18next";
 import { ArrowForward } from "@mui/icons-material";
 
 const MessagesTable = () => {
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMorePages, setHasMorePages] = useState(true);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await getMessages();
-        setMessages(response.data.messages);
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
-    };
+  const fetchMessages = async () => {
+    if (loading || !hasMorePages) return;
 
+    setLoading(true);
+    try {
+      const response = await getInfiniteScrollMessages(page);
+      const newMessages = response.data.messages;
+      setMessages((prevMessages) => [...prevMessages, ...newMessages]);
+      setHasMorePages(response.data.hasMorePages);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleScroll = () => {
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollPosition >= documentHeight - 100 && !loading) {
+      fetchMessages();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
 
   const formatDate = (dateString) => {
     const options = {
@@ -55,19 +83,19 @@ const MessagesTable = () => {
           <TableRow>
             <TableCell sx={{ fontSize: "16px", width: "2%" }}>ID</TableCell>
             <TableCell sx={{ fontSize: "16px", width: "16%" }}>
-              {t("MessagesPage.name")}
+              {t("MessagesInfiniteScroll.name")}
             </TableCell>
             <TableCell sx={{ fontSize: "16px", width: "32%" }}>
-              {t("MessagesPage.message")}
+              {t("MessagesInfiniteScroll.message")}
             </TableCell>
             <TableCell sx={{ fontSize: "16px", width: "16%" }}>
-              {t("MessagesPage.gender")}
+              {t("MessagesInfiniteScroll.gender")}
             </TableCell>
             <TableCell sx={{ fontSize: "16px", width: "16%" }}>
-              {t("MessagesPage.country")}
+              {t("MessagesInfiniteScroll.country")}
             </TableCell>
             <TableCell sx={{ fontSize: "16px", width: "16%" }}>
-              {t("MessagesPage.creationDate")}
+              {t("MessagesInfiniteScroll.creationDate")}
             </TableCell>
             <TableCell sx={{ fontSize: "16px", width: "4%" }}></TableCell>
           </TableRow>
@@ -93,7 +121,9 @@ const MessagesTable = () => {
                     : message.message}
                 </Tooltip>
               </TableCell>
-              <TableCell>{t(`MessagesPage.${message.gender}`)}</TableCell>
+              <TableCell>
+                {t(`MessagesInfiniteScroll.${message.gender}`)}
+              </TableCell>
               <TableCell>{message.country}</TableCell>
               <TableCell>{formatDate(message.creationDate)}</TableCell>
               <TableCell align="center" sx={{ width: "4%" }}>
@@ -109,6 +139,13 @@ const MessagesTable = () => {
           ))}
         </TableBody>
       </Table>
+      {loading && (
+        <div
+          style={{ display: "flex", justifyContent: "center", padding: "16px" }}
+        >
+          <CircularProgress />
+        </div>
+      )}
     </TableContainer>
   );
 };

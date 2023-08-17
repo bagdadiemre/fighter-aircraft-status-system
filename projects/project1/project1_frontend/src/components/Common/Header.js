@@ -72,6 +72,13 @@ const Header = ({ context, toggleDarkMode }) => {
               <Button color="inherit" component={Link} to="/messagesPaginated">
                 {t("Header.messagesPaginated")}
               </Button>
+              <Button
+                color="inherit"
+                component={Link}
+                to="/messagesInfiniteScroll"
+              >
+                IS
+              </Button>
               <Button color="inherit" component={Link} to="/users">
                 {t("Header.users")}
               </Button>

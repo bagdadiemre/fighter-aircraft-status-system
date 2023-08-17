@@ -51,6 +51,19 @@ export const getPaginatedMessages = async (
   }
 };
 
+export const getInfiniteScrollMessages = async (page) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${API_BASE_URL}/messagesInfiniteScroll`, {
+      headers: { token },
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const getMessageById = async (id) => {
   try {
     const token = localStorage.getItem("token");
