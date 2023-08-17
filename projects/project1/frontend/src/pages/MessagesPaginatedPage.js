@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { checkLogin } from "../services/authApi";
-import MessagesTable from "../components/MessagesPage/MessagesTable";
+import MessagesPaginatedTable from "../components/MessagesPaginatedPage/MessagesPaginatedTable";
 import { Container } from "@mui/material";
 
 const MessagesPage = () => {
@@ -26,7 +26,7 @@ const MessagesPage = () => {
   return (
     <div>
       <Container>
-        <MessagesTable />
+        <MessagesPaginatedTable />
       </Container>
     </div>
   );

@@ -12,11 +12,13 @@ import {
   MessagesDetailPage,
   UsersDetailPage,
   AddUserPage,
+  MessagesPaginatedPage,
 } from "./pages";
 
 import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 
 import Header from "./components/Common/Header"; // Update the import path
+import { Message } from "@mui/icons-material";
 
 const App = () => {
   const [context, setContext] = useState();
@@ -56,6 +58,20 @@ const App = () => {
                   toggleDarkMode={toggleDarkMode}
                 />
                 <MessagesPage />
+              </>
+            }
+          />
+          <Route
+            path="/messagesPaginated"
+            element={
+              <>
+                {" "}
+                <Header
+                  headerName="Contact Form Management System"
+                  context={context}
+                  toggleDarkMode={toggleDarkMode}
+                />
+                <MessagesPaginatedPage />
               </>
             }
           />

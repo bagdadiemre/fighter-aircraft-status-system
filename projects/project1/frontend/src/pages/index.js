@@ -8,6 +8,7 @@ import UnauthorizedPage from "./UnauthorizedPage";
 import MessagesDetailPage from "./MessagesDetailPage";
 import UsersDetailPage from "./UsersDetailPage";
 import AddUserPage from "./UsersAddPage";
+import MessagesPaginatedPage from "./MessagesPaginatedPage";
 
 export {
   ContactFormPage,
@@ -19,5 +20,6 @@ export {
   UsersPage,
   MessagesDetailPage,
   UsersDetailPage,
-  AddUserPage
+  AddUserPage,
+  MessagesPaginatedPage,
 };

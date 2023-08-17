@@ -18,7 +18,6 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import Header from "../components/Common/Header";
 
 const MessageDetailsPage = () => {
   const { id } = useParams();
@@ -61,6 +60,19 @@ const MessageDetailsPage = () => {
 
     handleCheckLogin();
   }, []);
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Intl.DateTimeFormat(t("lng"), options).format(
+      new Date(dateString)
+    );
+  };
 
   const handleDeleteConfirmation = () => {
     setShowDeleteConfirmation(true);
@@ -137,6 +149,11 @@ const MessageDetailsPage = () => {
             <strong>{t("MessagesDetailPage.country")}:</strong>{" "}
             {message.country}
           </Typography>
+          <Typography variant="body1" sx={{ margin: "8px 0" }}>
+            <strong>{t("MessagesDetailPage.creationDate")}:</strong>{" "}
+            {formatDate(message.creationDate)}
+          </Typography>
+
           <Button
             variant="outlined"
             color="primary"
@@ -171,20 +188,26 @@ const MessageDetailsPage = () => {
                   },
                 }}
               >
-                <DialogTitle>{t("MessagesDetailPage.confirmDeletion")}</DialogTitle>
+                <DialogTitle>
+                  {t("MessagesDetailPage.confirmDeletion")}
+                </DialogTitle>
                 <DialogContent>
                   <Typography variant="body1">
-                    <strong>{t("MessagesDetailPage.name")}:</strong> {message.name}
+                    <strong>{t("MessagesDetailPage.name")}:</strong>{" "}
+                    {message.name}
                   </Typography>
                   <Typography variant="body1" s>
-                    <strong>{t("MessagesDetailPage.message")}:</strong> {message.message}
+                    <strong>{t("MessagesDetailPage.message")}:</strong>{" "}
+                    {message.message}
                   </Typography>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleConfirmedDelete}>
-                  {t("MessagesDetailPage.delete")}
+                    {t("MessagesDetailPage.delete")}
                   </Button>
-                  <Button onClick={handleCancelDelete}>{t("MessagesDetailPage.cancel")}</Button>
+                  <Button onClick={handleCancelDelete}>
+                    {t("MessagesDetailPage.cancel")}
+                  </Button>
                 </DialogActions>
               </Dialog>
             </>

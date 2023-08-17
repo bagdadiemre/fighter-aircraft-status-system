@@ -1,4 +1,6 @@
 {
+  "lng": "tr",
+
   "Header": {
     "headerName": "İletişim Form Sistemi",
     "messages": "Mesajlar",
@@ -41,6 +43,17 @@
     "country": "Ülke",
     "gender": "Cinsiyet",
     "male": "Erkek",
+    "female": "Kadın",
+    "creationDate": "Oluşturulma Tarihi"
+  },
+
+  "MessagesPaginatedPage": {
+    "name": "İsim",
+    "message": "Mesaj",
+    "country": "Ülke",
+    "gender": "Cinsiyet",
+    "creationDate": "Oluşturulma Tarihi",
+    "male": "Erkek",
     "female": "Kadın"
   },
 
@@ -55,7 +68,8 @@
     "homepage": "Anasayfa",
     "delete": "Sil",
     "confirmDeletion": "Silmek istediğinize emin misiniz?",
-    "cancel": "İptal"
+    "cancel": "İptal",
+    "creationDate": "Oluşturulma Tarihi"
   },
 
   "UsersPage": {

@@ -13,7 +13,7 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
-import { ArrowForward } from "@mui/icons-material"; // Import the icon you want to use
+import { ArrowForward } from "@mui/icons-material"; 
 
 const MessagesTable = () => {
   const [messages, setMessages] = useState([]);
@@ -32,28 +32,43 @@ const MessagesTable = () => {
     fetchMessages();
   }, []);
 
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Intl.DateTimeFormat(t("lng"), options).format(
+      new Date(dateString)
+    );
+  };
+
   return (
-    <TableContainer component={Paper} sx={{ mt: 5, userSelect: "none", mb: 5 }}>
+    <TableContainer
+      component={Paper}
+      sx={{ mt: 5, userSelect: "none", mb: 5, borderRadius: "10px" }}
+    >
       <Table>
-        <TableHead
-        // sx={{
-        //   backgroundColor: "#83c5be", // Custom background color
-        // }}
-        >
+        <TableHead>
           <TableRow>
-            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
+            <TableCell sx={{ fontSize: "16px", width: "16%" }}>
               {t("MessagesPage.name")}
             </TableCell>
-            <TableCell sx={{ fontSize: "17px", width: "32%" }}>
+            <TableCell sx={{ fontSize: "16px", width: "32%" }}>
               {t("MessagesPage.message")}
             </TableCell>
-            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
+            <TableCell sx={{ fontSize: "16px", width: "16%" }}>
               {t("MessagesPage.gender")}
             </TableCell>
-            <TableCell sx={{ fontSize: "17px", width: "16%" }}>
+            <TableCell sx={{ fontSize: "16px", width: "16%" }}>
               {t("MessagesPage.country")}
             </TableCell>
-            <TableCell sx={{ fontSize: "17px", width: "4%" }}></TableCell>
+            <TableCell sx={{ fontSize: "16px", width: "16%" }}>
+              {t("MessagesPage.creationDate")}
+            </TableCell>
+            <TableCell sx={{ fontSize: "16px", width: "4%" }}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -68,14 +83,11 @@ const MessagesTable = () => {
               //   // },
               // }}
             >
-              <TableCell sx={{ fontSize: "16px", width: "16%" }}>
+              <TableCell >
                 {message.name}
               </TableCell>
               <TableCell
-                sx={{
-                  fontSize: "16px",
-                  width: "32%",
-                }}
+         
               >
                 <Tooltip title={message.message} arrow>
                   {message.message.length > 50
@@ -83,21 +95,22 @@ const MessagesTable = () => {
                     : message.message}
                 </Tooltip>
               </TableCell>
-              <TableCell sx={{ fontSize: "16px", width: "16%" }}>
-               {t(`MessagesPage.${message.gender}`)}
+              <TableCell >
+                {t(`MessagesPage.${message.gender}`)}
               </TableCell>
-              <TableCell sx={{ fontSize: "16px", width: "16%" }}>
+              <TableCell >
                 {message.country}
               </TableCell>
+              <TableCell>
+                {formatDate(message.creationDate)}
+              </TableCell>
               <TableCell align="center" sx={{ width: "4%" }}>
-                {" "}
-                {/* Add a cell for the icon */}
                 <IconButton
                   component={Link}
                   to={`/messages/${message.id}`}
                   size="small"
                 >
-                  <ArrowForward /> {/* Use the icon you imported */}
+                  <ArrowForward />
                 </IconButton>
               </TableCell>
             </TableRow>

@@ -28,6 +28,29 @@ export const getMessages = async () => {
   }
 };
 
+export const getPaginatedMessages = async (
+  page,
+  rowsPerPage,
+  sortBy,
+  sortOrder
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${API_BASE_URL}/messagesPagination`, {
+      params: {
+        page: page + 1,
+        perPage: rowsPerPage,
+        sortBy,
+        sortOrder,
+      },
+      headers: { token },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const getMessageById = async (id) => {
   try {
     const token = localStorage.getItem("token");

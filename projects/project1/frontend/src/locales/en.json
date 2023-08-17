@@ -1,4 +1,6 @@
 {
+  "lng": "en",
+
   "Header": {
     "headerName": "Contact Management System",
     "messages": "Messages",
@@ -41,6 +43,17 @@
     "country": "Country",
     "gender": "Gender",
     "male": "Male",
+    "female": "Female",
+    "creationDate": "Creation Date"
+  },
+
+  "MessagesPaginatedPage": {
+    "name": "Name",
+    "message": "Message",
+    "country": "Country",
+    "gender": "Gender",
+    "creationDate": "Creation Date",
+    "male": "Male",
     "female": "Female"
   },
 
@@ -55,7 +68,8 @@
     "homepage": "Homepage",
     "delete": "Delete",
     "confirmDeletion": "Are you sure you want to delete this message?",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "creationDate": "Creation Date"
   },
 
   "UsersPage": {
