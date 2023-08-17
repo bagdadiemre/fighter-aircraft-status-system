@@ -67,7 +67,10 @@ const Header = ({ context, toggleDarkMode }) => {
           {context?.role === "admin" && (
             <div>
               <Button color="inherit" component={Link} to="/messages">
-                {t('Header.messages')}
+                {t("Header.messages")}
+              </Button>
+              <Button color="inherit" component={Link} to="/messagesPaginated">
+                {t("Header.messagesPaginated")}
               </Button>
               <Button color="inherit" component={Link} to="/users">
                 {t("Header.users")}

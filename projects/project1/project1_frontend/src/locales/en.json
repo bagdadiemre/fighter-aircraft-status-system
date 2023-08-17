@@ -4,6 +4,7 @@
   "Header": {
     "headerName": "Contact Management System",
     "messages": "Messages",
+    "messagesPaginated": "Paginated Messages",
     "users": "Users",
     "reports": "Reports",
     "darkMode": "Dark Mode",

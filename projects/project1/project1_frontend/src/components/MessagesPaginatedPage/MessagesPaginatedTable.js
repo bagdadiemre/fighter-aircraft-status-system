@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 const MessageTable = () => {
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortBy, setSortBy] = useState("creationDate");
   const [sortOrder, setSortOrder] = useState("asc");
   const [totalCount, setTotalCount] = useState(0);

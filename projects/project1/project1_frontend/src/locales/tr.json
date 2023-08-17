@@ -4,6 +4,7 @@
   "Header": {
     "headerName": "İletişim Form Sistemi",
     "messages": "Mesajlar",
+    "messagesPaginated": "Paginated Mesajlar",
     "users": "Kullanıcılar",
     "reports": "Raporlar",
     "darkMode": "Karanlık Mod",
