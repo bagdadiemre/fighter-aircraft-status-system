@@ -28,7 +28,7 @@
     "messageRequiredError": "Message is required.",
     "countryRequiredError": "Country is required.",
     "genderRequiredError": "Gender is required.",
-    "formSubmittedSuccessfully": "Form submitted successfully.",
+    "formSubmittedSuccessfully": "Form submitted successfully",
     "formSubmissionError": "Error submitting form.",
     "submit": "Submit",
     "name": "*Name",

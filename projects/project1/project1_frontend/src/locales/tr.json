@@ -28,7 +28,7 @@
     "messageRequiredError": "Mesaj alanı boş bırakılamaz!",
     "countryRequiredError": "Ülke alanı boş bırakılamaz!",
     "genderRequiredError": "Cinsiyet alanı boş bırakılamaz!",
-    "formSubmittedSuccessfully": "Form başarıyla gönderildi.",
+    "formSubmittedSuccessfully": "Form başarıyla gönderildi",
     "formSubmissionError": "Form gönderilirken hata oluştu!",
     "submit": "Gönder",
     "name": "*İsim",

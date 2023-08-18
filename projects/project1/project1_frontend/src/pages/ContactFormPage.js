@@ -30,9 +30,38 @@ const ContactForm = () => {
   const [countryError, setCountryError] = useState(false);
   const [genderError, setGenderError] = useState(false);
   const { t } = useTranslation();
+  const [socket, setSocket] = useState(null); // New state for WebSocket
 
   useEffect(() => {
     fetchCountries();
+
+    // Create WebSocket connection when the component mounts
+    const newSocket = new WebSocket("ws://localhost:5165"); // Adjust URL and port
+    newSocket.onopen = () => {
+      console.log("WebSocket connected");
+    };
+    newSocket.onmessage = (event) => {
+      const messageData = JSON.parse(event.data);
+      // Update state to show incoming message
+      // For example, you can use a separate state for incoming messages
+      // and use it to display snack bars.
+      setSuccessMessage(
+        `${t("ContactForm.formSubmittedSuccessfully")} |  ${
+          messageData.name
+        } - ${messageData.message}`
+      );
+    };
+    newSocket.onclose = () => {
+      console.log("WebSocket closed");
+    };
+    setSocket(newSocket);
+
+    // Clean up the WebSocket connection when the component unmounts
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
   }, []);
 
   const fetchCountries = async () => {
@@ -96,8 +125,6 @@ const ContactForm = () => {
       setMessage("");
       setGender("");
       setCountry("");
-      const successMessage = t("ContactForm.formSubmittedSuccessfully");
-      setSuccessMessage(successMessage);
     } catch (error) {
       const errorMessage = t("ContactForm.formSubmissionError");
       setError(errorMessage);
@@ -166,7 +193,7 @@ const ContactForm = () => {
                         {t("ContactForm.nameRequiredError")}
                       </Typography>
                     )}
-                    <NameField                  
+                    <NameField
                       name={name}
                       handleNameChange={handleNameChange}
                       nameError={nameError}

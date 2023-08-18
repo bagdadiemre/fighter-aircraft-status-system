@@ -1,6 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+const http = require("http"); // Import the http module
+const WebSocket = require("ws"); // Import the ws module
 
 const {
   readDataFromFile,
@@ -12,14 +14,36 @@ const JWT_SECRET_KEY = "contact-form-manager-server-secret-key";
 
 const app = express();
 app.use(cors());
+
+// Create an HTTP server
+const server = http.createServer(app);
+
+// Create a WebSocket server by passing the HTTP server as an argument
+const wss = new WebSocket.Server({ server });
+
 const port = 5165;
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello, World!");
 });
 
+// Handle WebSocket connections
+wss.on("connection", (ws) => {
+  console.log("Client connected to WebSocket");
+
+  // Handle incoming messages from the client
+  ws.on("message", (message) => {
+    console.log(`Received message: ${message}`);
+  });
+});
+
 // Start the server
-app.listen(port, () => {
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
+
+// Start the server
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
@@ -187,6 +211,14 @@ app.post("/api/message/add", express.json(), async (req, res) => {
   newMessage.read = "false";
   currentMessages.push(newMessage);
   writeDataToFile("data/messages.json", currentMessages);
+
+  // Broadcast the new message to all connected clients
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(newMessage));
+    }
+  });
+
   res.status(200).send({ data: { message: newMessage } });
 });
 
