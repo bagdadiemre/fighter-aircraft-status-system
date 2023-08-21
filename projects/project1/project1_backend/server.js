@@ -3,13 +3,13 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const http = require("http"); // Import the http module
 const WebSocket = require("ws"); // Import the ws module
-
 const {
-  readDataFromFile,
-  writeDataToFile,
+  connectDatabase,
+  client,
   getNextUserId,
   getNextMessageId,
-} = require("./data-manager.js");
+} = require("./data-manager");
+connectDatabase();
 const JWT_SECRET_KEY = "contact-form-manager-server-secret-key";
 
 const app = express();
@@ -38,11 +38,6 @@ wss.on("connection", (ws) => {
 });
 
 // Start the server
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
-
-// Start the server
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
@@ -67,21 +62,29 @@ async function checkTokenAndRole(req, res, roleList) {
   }
   try {
     const jwtTokenPayload = jwt.verify(token, JWT_SECRET_KEY);
-    const blacklistedTokens = await readDataFromFile(
-      "data/blacklisted-tokens.json"
-    );
-    if (blacklistedTokens.includes(token)) {
+
+    // Check if the token is blacklisted
+    const db = client.db();
+    const blacklistedTokensCollection = db.collection("blacklisted-tokens");
+    const isTokenBlacklisted = await blacklistedTokensCollection.findOne({
+      token,
+    });
+
+    if (isTokenBlacklisted) {
       res.status(401).send({ error: "User is not authenticated" });
       return false;
     }
-    const currentUsers = await readDataFromFile("data/users.json");
-    const existingUser = currentUsers.find(
-      (user) => user.id == jwtTokenPayload.userId
-    );
+
+    const usersCollection = db.collection("users");
+    const existingUser = await usersCollection.findOne({
+      id: jwtTokenPayload.userId,
+    });
+
     if (!existingUser) {
       res.status(401).send({ error: "User is not authenticated" });
       return false;
     }
+
     if (
       roleList &&
       roleList.length > 0 &&
@@ -108,24 +111,37 @@ app.post("/api/user/login", express.json(), async (req, res) => {
     res.status(400).send({ error: "Password is required" });
     return;
   }
-  const currentUsers = await readDataFromFile("data/users.json");
-  const existingUser = currentUsers.find((user) => user.username === username);
-  if (!existingUser) {
-    res.status(400).send({ error: "Username does not exist" });
-    return;
+
+  try {
+    const db = client.db();
+    const usersCollection = db.collection("users");
+
+    const existingUser = await usersCollection.findOne({ username });
+
+    if (!existingUser) {
+      res.status(400).send({ error: "Username does not exist" });
+      return;
+    }
+
+    if (existingUser.password !== password) {
+      res.status(400).send({ error: "Password is incorrect" });
+      return;
+    }
+
+    const jwtTokenPayload = {
+      userId: existingUser.id,
+      username: existingUser.username,
+    };
+
+    const jwtToken = jwt.sign(jwtTokenPayload, JWT_SECRET_KEY, {
+      expiresIn: "55m",
+    });
+
+    res.status(200).send({ data: { user: existingUser, token: jwtToken } });
+  } catch (error) {
+    console.error("Error authenticating user:", error);
+    res.status(500).send({ error: "Internal server error" });
   }
-  if (existingUser.password !== password) {
-    res.status(400).send({ error: "Password is incorrect" });
-    return;
-  }
-  const jwtTokenPayload = {
-    userId: existingUser.id,
-    username: existingUser.username,
-  };
-  const jwtToken = jwt.sign(jwtTokenPayload, JWT_SECRET_KEY, {
-    expiresIn: "55m",
-  });
-  res.status(200).send({ data: { user: existingUser, token: jwtToken } });
 });
 
 // POST check if user is logged in
@@ -135,27 +151,34 @@ app.post("/api/user/check-login", express.json(), async (req, res) => {
     res.status(401).send({ error: "Token is required" });
     return;
   }
+
   try {
     const jwtTokenPayload = jwt.verify(token, JWT_SECRET_KEY);
-    const blacklistedTokens = await readDataFromFile(
-      "data/blacklisted-tokens.json"
-    );
-    if (blacklistedTokens.includes(token)) {
+
+    const db = client.db();
+    const blacklistedTokensCollection = db.collection("blacklisted-tokens");
+    const isTokenBlacklisted = await blacklistedTokensCollection.findOne({
+      token,
+    });
+
+    if (isTokenBlacklisted) {
       res.status(401).send({ error: "Token is invalid" });
       return;
     }
-    const currentUsers = await readDataFromFile("data/users.json");
-    const existingUser = currentUsers.find(
-      (user) => user.id == jwtTokenPayload.userId
-    );
+
+    const usersCollection = db.collection("users");
+    const existingUser = await usersCollection.findOne({
+      id: jwtTokenPayload.userId,
+    });
+
     if (!existingUser) {
       res.status(400).send({ error: "User does not exist" });
       return;
     }
+
     res.status(200).send({ data: { user: existingUser } });
-  } catch (err) {
+  } catch (error) {
     res.status(401).send({ error: "Token is invalid" });
-    return;
   }
 });
 
@@ -165,74 +188,99 @@ app.post("/api/user/logout", express.json(), async (req, res) => {
     res.status(401).send({ error: "Token is required" });
     return;
   }
-  const blacklistedTokens = await readDataFromFile(
-    "data/blacklisted-tokens.json"
-  );
-  if (!blacklistedTokens.includes(token)) {
-    blacklistedTokens.push(token);
+
+  try {
+    const db = client.db();
+    const blacklistedTokensCollection = db.collection("blacklisted-tokens");
+
+    const blacklistedToken = { token };
+    await blacklistedTokensCollection.insertOne(blacklistedToken);
+
+    res.status(200).send({ data: { message: "Logged out successfully" } });
+  } catch (error) {
+    console.error("Error logging out user:", error);
+    res.status(500).send({ error: "Internal server error" });
   }
-  writeDataToFile("data/blacklisted-tokens.json", blacklistedTokens);
-  res.status(200).send({ data: { message: "Logged out successfully" } });
 });
 
-// GET countries
 app.get("/api/countries", async (req, res) => {
-  const countries = await readDataFromFile("data/countries.json");
-  res.status(200).send({ data: { countries } });
+  try {
+    const db = client.db();
+    const countriesCollection = db.collection("countries");
+
+    const countries = await countriesCollection.findOne({}); // Assuming all countries are stored in a single document
+    console.log("countries API:", countries);
+
+    if (!countries) {
+      res.status(404).send({ error: "Countries not found" });
+      return;
+    }
+
+    res.status(200).send({ data: { countries: countries.countries } });
+  } catch (error) {
+    console.error("Error retrieving countries:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
 });
 
-// POST add new message
 app.post("/api/message/add", express.json(), async (req, res) => {
   const { name, message, gender, country } = req.body;
-  if (!name) {
-    res.status(400).send({ error: "Name is required" });
-    return;
-  }
-  if (!message) {
-    res.status(400).send({ error: "Message is required" });
-    return;
-  }
-  if (!gender) {
-    res.status(400).send({ error: "Gender is required" });
-    return;
-  }
-  if (!country) {
-    res.status(400).send({ error: "Country is required" });
-    return;
-  }
-  const currentMessages = await readDataFromFile("data/messages.json");
-  const newMessageId = await getNextMessageId();
-  const newMessage = { id: newMessageId };
-  newMessage.name = "" + name;
-  newMessage.message = "" + message;
-  newMessage.gender = "" + gender;
-  newMessage.country = "" + country;
-  newMessage.creationDate = new Date().toISOString();
-  newMessage.read = "false";
-  currentMessages.push(newMessage);
-  writeDataToFile("data/messages.json", currentMessages);
 
-  // Broadcast the new message to all connected clients
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(newMessage));
-    }
-  });
+  if (!name || !message || !gender || !country) {
+    res.status(400).send({ error: "Required fields are missing" });
+    return;
+  }
 
-  res.status(200).send({ data: { message: newMessage } });
+  try {
+    const db = client.db();
+    const messagesCollection = db.collection("messages");
+
+    const newMessageId = await getNextMessageId();
+    const newMessage = {
+      id: newMessageId,
+      name,
+      message,
+      gender,
+      country,
+      creationDate: new Date().toISOString(),
+      read: "false",
+    };
+
+    await messagesCollection.insertOne(newMessage);
+
+    // Broadcast the new message to all connected clients
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(newMessage));
+      }
+    });
+
+    res.status(200).send({ data: { message: newMessage } });
+  } catch (error) {
+    console.error("Error adding new message:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
 });
 
-// GET messages
 app.get("/api/messages", async (req, res) => {
   const authCheck = await checkTokenAndRole(req, res, ["admin", "reader"]);
   if (!authCheck) {
     return;
   }
-  const messages = await readDataFromFile("data/messages.json");
-  res.status(200).send({ data: { messages } });
+
+  try {
+    const db = client.db();
+    const messagesCollection = db.collection("messages");
+
+    const messages = await messagesCollection.find({}).toArray();
+
+    res.status(200).send({ data: { messages } });
+  } catch (error) {
+    console.error("Error retrieving messages:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
 });
 
-// GET paginated and sorted messages
 app.get("/api/messagesPagination", async (req, res) => {
   const authCheck = await checkTokenAndRole(req, res, ["admin", "reader"]);
   if (!authCheck) {
@@ -245,33 +293,43 @@ app.get("/api/messagesPagination", async (req, res) => {
     sortBy = "gender",
     sortOrder = "asc",
   } = req.query;
-  const messages = await readDataFromFile("data/messages.json");
 
-  const sortDirection = sortOrder.toLowerCase() === "asc" ? 1 : -1;
+  try {
+    const db = client.db();
+    const messagesCollection = db.collection("messages");
 
-  const allowedSortColumns = ["name", "gender", "creationDate", "country"];
-  const sortColumn = allowedSortColumns.includes(sortBy)
-    ? sortBy
-    : "creationDate";
+    const sortDirection = sortOrder.toLowerCase() === "asc" ? 1 : -1;
 
-  // Sort the messages first
-  const sortedMessages = messages.sort((a, b) => {
-    if (a[sortColumn] < b[sortColumn]) {
-      return -sortDirection;
-    }
-    if (a[sortColumn] > b[sortColumn]) {
-      return sortDirection;
-    }
-    return 0;
-  });
+    const allowedSortColumns = ["name", "gender", "creationDate", "country"];
+    const sortColumn = allowedSortColumns.includes(sortBy)
+      ? sortBy
+      : "creationDate";
 
-  const startIndex = (page - 1) * perPage;
-  const endIndex = startIndex + parseInt(perPage);
-  const paginatedMessages = sortedMessages.slice(startIndex, endIndex);
+    // Get total count of messages
+    const totalCount = await messagesCollection.countDocuments();
 
-  res.status(200).send({
-    data: { messages: paginatedMessages, totalCount: messages.length },
-  });
+    // Sort and paginate messages using MongoDB aggregation
+    const paginatedMessages = await messagesCollection
+      .aggregate([
+        {
+          $sort: { [sortColumn]: sortDirection },
+        },
+        {
+          $skip: (page - 1) * parseInt(perPage),
+        },
+        {
+          $limit: parseInt(perPage),
+        },
+      ])
+      .toArray();
+
+    res.status(200).send({
+      data: { messages: paginatedMessages, totalCount },
+    });
+  } catch (error) {
+    console.error("Error retrieving paginated messages:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
 });
 
 // GET messages by infinite scroll
@@ -283,15 +341,31 @@ app.get("/api/messagesInfiniteScroll", async (req, res) => {
 
   const page = parseInt(req.query.page) || 1; // Get the requested page number from the query parameter
   const pageSize = 10; // Number of messages to load per page
-  const messages = await readDataFromFile("data/messages.json");
 
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const paginatedMessages = messages.slice(startIndex, endIndex);
+  try {
+    const db = client.db();
+    const messagesCollection = db.collection("messages");
 
-  const hasMorePages = endIndex < messages.length;
+    const startIndex = (page - 1) * pageSize;
 
-  res.status(200).send({ data: { messages: paginatedMessages, hasMorePages } });
+    // Fetch messages for the current page
+    const paginatedMessages = await messagesCollection
+      .find({})
+      .skip(startIndex)
+      .limit(pageSize)
+      .toArray();
+
+    // Check if there are more messages
+    const totalCount = await messagesCollection.countDocuments();
+    const hasMorePages = startIndex + pageSize < totalCount;
+
+    res
+      .status(200)
+      .send({ data: { messages: paginatedMessages, hasMorePages } });
+  } catch (error) {
+    console.error("Error retrieving messages for infinite scroll:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
 });
 
 // GET message by id
@@ -300,14 +374,26 @@ app.get("/api/message/:id", async (req, res) => {
   if (!authCheck) {
     return;
   }
+
   const { id } = req.params;
-  const messages = await readDataFromFile("data/messages.json");
-  const message = messages.find((message) => message.id == id);
-  if (!message) {
-    res.status(404).send({ error: "Message not found" });
-    return;
+
+  try {
+    const db = client.db();
+    const messagesCollection = db.collection("messages");
+
+    // Find the message by its ID
+    const message = await messagesCollection.findOne({ id: parseInt(id) });
+
+    if (!message) {
+      res.status(404).send({ error: "Message not found" });
+      return;
+    }
+
+    res.status(200).send({ data: { message } });
+  } catch (error) {
+    console.error("Error retrieving message by ID:", error);
+    res.status(500).send({ error: "Internal server error" });
   }
-  res.status(200).send({ data: { message } });
 });
 
 // POST read message by id
@@ -316,16 +402,32 @@ app.post("/api/message/read/:id", express.json(), async (req, res) => {
   if (!authCheck) {
     return;
   }
+
   const { id } = req.params;
-  const messages = await readDataFromFile("data/messages.json");
-  const message = messages.find((message) => message.id == id);
-  if (!message) {
-    res.status(404).send({ error: "Message not found" });
-    return;
+
+  try {
+    const db = client.db();
+    const messagesCollection = db.collection("messages");
+
+    // Find the message by its ID
+    const message = await messagesCollection.findOne({ id: parseInt(id) });
+
+    if (!message) {
+      res.status(404).send({ error: "Message not found" });
+      return;
+    }
+
+    // Update the "read" status of the message
+    await messagesCollection.updateOne(
+      { id: parseInt(id) },
+      { $set: { read: "true" } }
+    );
+
+    res.status(200).send({ data: { message } });
+  } catch (error) {
+    console.error("Error marking message as read:", error);
+    res.status(500).send({ error: "Internal server error" });
   }
-  message.read = "true";
-  writeDataToFile("data/messages.json", messages);
-  res.status(200).send({ data: { message } });
 });
 
 // POST delete message by id
@@ -334,16 +436,28 @@ app.post("/api/message/delete/:id", express.json(), async (req, res) => {
   if (!authCheck) {
     return;
   }
+
   const { id } = req.params;
-  const messages = await readDataFromFile("data/messages.json");
-  const messageIndex = messages.findIndex((message) => message.id == id);
-  if (messageIndex < 0) {
-    res.status(404).send({ error: "Message not found" });
-    return;
+
+  try {
+    const db = client.db();
+    const messagesCollection = db.collection("messages");
+
+    // Delete the message by its ID
+    const deleteResult = await messagesCollection.deleteOne({
+      id: parseInt(id),
+    });
+
+    if (deleteResult.deletedCount === 0) {
+      res.status(404).send({ error: "Message not found" });
+      return;
+    }
+
+    res.status(200).send({ data: { message: { id } } });
+  } catch (error) {
+    console.error("Error deleting message:", error);
+    res.status(500).send({ error: "Internal server error" });
   }
-  messages.splice(messageIndex, 1);
-  writeDataToFile("data/messages.json", messages);
-  res.status(200).send({ data: { message: { id } } });
 });
 
 // POST add new user with reader role
@@ -352,7 +466,9 @@ app.post("/api/user/add-reader", express.json(), async (req, res) => {
   if (!authCheck) {
     return;
   }
+
   const { username, password, base64Photo } = req.body;
+
   if (!username) {
     res.status(400).send({ error: "Username is required" });
     return;
@@ -365,31 +481,56 @@ app.post("/api/user/add-reader", express.json(), async (req, res) => {
     res.status(400).send({ error: "Photo is required" });
     return;
   }
-  const currentUsers = await readDataFromFile("data/users.json");
-  const existingUser = currentUsers.find((user) => user.username === username);
-  if (existingUser) {
-    res.status(400).send({ error: "Username already exists" });
-    return;
+
+  try {
+    const db = client.db();
+    const usersCollection = db.collection("users");
+
+    // Check if the username already exists
+    const existingUser = await usersCollection.findOne({ username });
+
+    if (existingUser) {
+      res.status(400).send({ error: "Username already exists" });
+      return;
+    }
+
+    const newUserId = await getNextUserId();
+    const newUser = {
+      id: newUserId,
+      username,
+      password,
+      base64Photo,
+      role: "reader",
+    };
+
+    // Insert the new user into the collection
+    await usersCollection.insertOne(newUser);
+
+    res.status(200).send({ data: { user: newUser } });
+  } catch (error) {
+    console.error("Error adding new user:", error);
+    res.status(500).send({ error: "Internal server error" });
   }
-  const newUserId = await getNextUserId();
-  const newUser = { id: newUserId };
-  newUser.username = "" + username;
-  newUser.password = "" + password;
-  newUser.base64Photo = "" + base64Photo;
-  newUser.role = "reader";
-  currentUsers.push(newUser);
-  writeDataToFile("data/users.json", currentUsers);
-  res.status(200).send({ data: { user: newUser } });
 });
 
-// GET users
 app.get("/api/users", async (req, res) => {
   const authCheck = await checkTokenAndRole(req, res, ["admin"]);
   if (!authCheck) {
     return;
   }
-  const users = await readDataFromFile("data/users.json");
-  res.status(200).send({ data: { users } });
+
+  try {
+    const db = client.db();
+    const usersCollection = db.collection("users");
+
+    // Find all users in the collection
+    const users = await usersCollection.find().toArray();
+
+    res.status(200).send({ data: { users } });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
 });
 
 // GET user by id
@@ -398,14 +539,26 @@ app.get("/api/user/:id", async (req, res) => {
   if (!authCheck) {
     return;
   }
+
   const { id } = req.params;
-  const users = await readDataFromFile("data/users.json");
-  const user = users.find((user) => user.id == id);
-  if (!user) {
-    res.status(404).send({ error: "User not found" });
-    return;
+
+  try {
+    const db = client.db();
+    const usersCollection = db.collection("users");
+
+    // Find the user with the specified ID
+    const user = await usersCollection.findOne({ id: parseInt(id) });
+
+    if (!user) {
+      res.status(404).send({ error: "User not found" });
+      return;
+    }
+
+    res.status(200).send({ data: { user } });
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).send({ error: "Internal server error" });
   }
-  res.status(200).send({ data: { user } });
 });
 
 // POST update user by id
@@ -414,8 +567,10 @@ app.post("/api/user/update/:id", express.json(), async (req, res) => {
   if (!authCheck) {
     return;
   }
+
   const { id } = req.params;
   const { username, password, base64Photo } = req.body;
+
   if (!username) {
     res.status(400).send({ error: "Username is required" });
     return;
@@ -428,15 +583,32 @@ app.post("/api/user/update/:id", express.json(), async (req, res) => {
     res.status(400).send({ error: "Photo is required" });
     return;
   }
-  const users = await readDataFromFile("data/users.json");
-  const user = users.find((user) => user.id == id);
-  if (!user) {
-    res.status(404).send({ error: "User not found" });
-    return;
+
+  try {
+    const db = client.db();
+    const usersCollection = db.collection("users");
+
+    // Update the user's fields based on the request body
+    const updatedUser = {
+      username: "" + username,
+      password: "" + password,
+      base64Photo: "" + base64Photo,
+    };
+
+    // Update the user document in the collection
+    const updateResult = await usersCollection.updateOne(
+      { id },
+      { $set: updatedUser }
+    );
+
+    if (updateResult.matchedCount === 0) {
+      res.status(404).send({ error: "User not found" });
+      return;
+    }
+
+    res.status(200).send({ data: { user: updatedUser } });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send({ error: "Internal server error" });
   }
-  user.username = "" + username;
-  user.password = "" + password;
-  user.base64Photo = "" + base64Photo;
-  writeDataToFile("data/users.json", users);
-  res.status(200).send({ data: { user } });
 });

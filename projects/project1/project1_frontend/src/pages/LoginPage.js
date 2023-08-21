@@ -31,6 +31,7 @@ const LoginPage = () => {
 
       const data = await login(username, password);
 
+      console.log("Login successful:", data);
       localStorage.setItem("token", data.data.token);
       setContext(data.data.user);
 
