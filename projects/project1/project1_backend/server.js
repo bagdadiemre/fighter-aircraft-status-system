@@ -209,7 +209,6 @@ app.get("/api/countries", async (req, res) => {
     const countriesCollection = db.collection("countries");
 
     const countries = await countriesCollection.findOne({}); // Assuming all countries are stored in a single document
-    console.log("countries API:", countries);
 
     if (!countries) {
       res.status(404).send({ error: "Countries not found" });
@@ -587,26 +586,22 @@ app.post("/api/user/update/:id", express.json(), async (req, res) => {
   try {
     const db = client.db();
     const usersCollection = db.collection("users");
+    const user = await usersCollection.findOne({ id: parseInt(id) });
 
-    // Update the user's fields based on the request body
-    const updatedUser = {
-      username: "" + username,
-      password: "" + password,
-      base64Photo: "" + base64Photo,
-    };
-
-    // Update the user document in the collection
-    const updateResult = await usersCollection.updateOne(
-      { id },
-      { $set: updatedUser }
-    );
-
-    if (updateResult.matchedCount === 0) {
+    if (!user) {
       res.status(404).send({ error: "User not found" });
       return;
     }
 
-    res.status(200).send({ data: { user: updatedUser } });
+    user.password = password;
+    user.base64Photo = base64Photo;
+
+    const updateResult = await usersCollection.replaceOne(
+      { _id: user._id },
+      user
+    );
+
+    res.status(200).send({ data: { user: updateResult } });
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).send({ error: "Internal server error" });

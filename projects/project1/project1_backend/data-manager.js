@@ -44,10 +44,10 @@ async function writeDataToCollection(collectionName, data) {
 // Function to retrieve the next user ID and update the last ID in MongoDB
 async function getNextUserId() {
   const db = client.db();
-  const lastIdCollection = db.collection("lastId"); // Assuming you have a collection named 'lastId'
+  const lastIdCollection = db.collection("last-id"); // Assuming you have a collection named 'lastId'
 
   const lastIdDocument = await lastIdCollection.findOneAndUpdate(
-    { _id: "user" },
+    {},
     { $inc: { user: 1 } },
     { upsert: true, returnOriginal: false }
   );
@@ -58,10 +58,10 @@ async function getNextUserId() {
 // Function to retrieve the next message ID and update the last ID in MongoDB
 async function getNextMessageId() {
   const db = client.db();
-  const lastIdCollection = db.collection("lastId"); // Assuming you have a collection named 'lastId'
+  const lastIdCollection = db.collection("last-id"); // Assuming you have a collection named 'lastId'
 
   const lastIdDocument = await lastIdCollection.findOneAndUpdate(
-    { _id: "message" },
+    {},
     { $inc: { message: 1 } },
     { upsert: true, returnOriginal: false }
   );
