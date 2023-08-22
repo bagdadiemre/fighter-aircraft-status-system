@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * user1 controller
+ * country controller
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::user1.user1');
+module.exports = createCoreController('api::country.country');

@@ -40,14 +40,29 @@ const UsersDetailPage = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
+    const handleCheckLogin = async () => {
+      try {
+        const data = await checkLogin();
+        setContext(data);
+      } catch (error) {
+        console.error("Check Login failed:", error);
+        console.log(context);
+        navigate("/unauthorized");
+      }
+    };
+
+    handleCheckLogin();
+  }, []);
+
+  useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData = await getUserById(id);
-        setUser(userData.data.user);
+        setUser(userData);
         setEditedUser({
-          username: userData.data.user.username,
-          password: userData.data.user.password,
-          base64Photo: userData.data.user.base64Photo,
+          username: userData.username,
+          password: userData.password,
+          base64Photo: userData.base64Photo,
           isDirty: false,
         });
       } catch (error) {
@@ -56,18 +71,6 @@ const UsersDetailPage = () => {
     };
 
     fetchUser();
-
-    const handleCheckLogin = async () => {
-      try {
-        const data = await checkLogin();
-        setContext(data.data.user);
-      } catch (error) {
-        console.error(error);
-        navigate("/unauthorized");
-      }
-    };
-
-    handleCheckLogin();
   }, [id]);
 
   const handleImageUpload = (event) => {
@@ -126,9 +129,8 @@ const UsersDetailPage = () => {
 
   return (
     <>
-      {" "}
-      {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
-      {context?.role === "admin" && (
+      {context?.roleType !== "admin" && <div>{navigate("/unauthorized")}</div>}
+      {context?.roleType === "admin" && (
         <div>
           <Container
             maxWidth="sm"
@@ -182,7 +184,9 @@ const UsersDetailPage = () => {
                 titleTypographyProps={{ variant: "h6" }}
                 title={`${t("UsersDetailPage.username")}: ${user.username}`}
                 subheaderTypographyProps={{ variant: "subtitle1" }}
-                subheader={`${t("UsersDetailPage.role")}:  ${t(`UsersDetailPage.${user.role}`)}`}
+                subheader={`${t("UsersDetailPage.role")}:  ${t(
+                  `UsersDetailPage.${user.roleType}`
+                )}`}
               />
 
               <CardActions sx={{ ml: 1, mb: 1 }}>

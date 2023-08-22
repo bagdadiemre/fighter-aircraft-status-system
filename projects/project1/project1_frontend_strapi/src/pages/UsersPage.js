@@ -13,7 +13,7 @@ const UsersPage = () => {
   const fetchUsers = async () => {
     try {
       const usersData = await getUsers();
-      setUsers(usersData.data.users);
+      setUsers(usersData);
     } catch (error) {
       console.error(error);
       navigate("/unauthorized");
@@ -24,7 +24,7 @@ const UsersPage = () => {
     const handleCheckLogin = async () => {
       try {
         const data = await checkLogin();
-        setContext(data.data.user);
+        setContext(data);
       } catch (error) {
         console.error(error);
       }
@@ -32,17 +32,16 @@ const UsersPage = () => {
 
     handleCheckLogin();
     fetchUsers();
-  }, [setContext]);
+  }, []);
 
   return (
     <div>
-      {/* Conditional checks for rendering components */}
-      {context?.role === "reader" ? navigate("/unauthorized") : null}
-      {context?.role !== "reader" && context?.role !== "admin"
+      {context?.roleType === "reader" ? navigate("/unauthorized") : null}
+      {context?.roleType !== "reader" && context?.roleType !== "admin"
         ? navigate("/login")
         : null}
 
-      {context?.role === "admin" && (
+      {context?.roleType === "admin" && (
         <div>
           {/* Conditional check before rendering UsersTable */}
           <UsersTable users={users} />

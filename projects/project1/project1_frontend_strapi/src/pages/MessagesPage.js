@@ -12,7 +12,7 @@ const MessagesPage = () => {
     const handleCheckLogin = async () => {
       try {
         const data = await checkLogin();
-        setContext(data.data.user);
+        setContext(data);
       } catch (error) {
         console.error("Check Login failed:", error);
         console.log(context);

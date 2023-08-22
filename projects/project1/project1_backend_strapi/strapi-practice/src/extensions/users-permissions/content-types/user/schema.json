@@ -65,15 +65,11 @@
       "inversedBy": "users",
       "configurable": false
     },
+    "roleType": {
+      "type": "string"
+    },
     "base64Photo": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      "type": "text"
     }
   }
 }

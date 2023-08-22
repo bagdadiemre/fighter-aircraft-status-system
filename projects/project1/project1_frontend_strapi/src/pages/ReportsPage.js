@@ -18,7 +18,7 @@ const ReportsPage = () => {
     const handleCheckLogin = async () => {
       try {
         const data = await checkLogin();
-        setContext(data.data.user);
+        setContext(data);
       } catch (error) {
         console.error(error);
 
@@ -29,7 +29,7 @@ const ReportsPage = () => {
     const fetchMessageData = async () => {
       try {
         const messages = await getMessages(); // Using the getMessages function from messagesApi
-        setMessageData(messages.data.messages);
+        setMessageData(messages);
       } catch (error) {
         console.error(error);
       }
@@ -43,7 +43,7 @@ const ReportsPage = () => {
     const countryCounts = {};
 
     messageData.forEach((message) => {
-      const country = message.country;
+      const country = message.attributes.country;
       if (countryCounts[country]) {
         countryCounts[country]++;
       } else {
@@ -77,7 +77,7 @@ const ReportsPage = () => {
     };
 
     messageData.forEach((message) => {
-      const gender = message.gender;
+      const gender = message.attributes.gender;
       genderCounts[gender]++;
     });
 
@@ -102,8 +102,8 @@ const ReportsPage = () => {
 
   return (
     <div>
-      {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
-      {context?.role === "admin" && (
+      {context?.roleType !== "admin" && <div>{navigate("/unauthorized")}</div>}
+      {context?.roleType === "admin" && (
         <div>
           {messageData && (
             <div>

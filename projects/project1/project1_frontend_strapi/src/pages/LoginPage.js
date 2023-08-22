@@ -32,8 +32,11 @@ const LoginPage = () => {
       const data = await login(username, password);
 
       console.log("Login successful:", data);
-      localStorage.setItem("token", data.data.token);
-      setContext(data.data.user);
+      console.log("Token successful:", data.jwt);
+      console.log("User successful:", data.user);
+
+      localStorage.setItem("token", data.jwt);
+      setContext(data.user);
 
       navigate("/messages"); // Redirect to MessagesPage
     } catch (error) {

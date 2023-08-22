@@ -70,7 +70,7 @@ const Header = ({ context, toggleDarkMode }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {t("Header.headerName")}
           </Typography>
-          {context?.role === "admin" && (
+          {context?.roleType === "admin" && (
             <div>
               <Button color="inherit" component={Link} to="/messages">
                 {t("Header.messages")}

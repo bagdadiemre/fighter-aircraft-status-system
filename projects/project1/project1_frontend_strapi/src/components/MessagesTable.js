@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { ArrowForward } from "@mui/icons-material";
 import DoneIcon from "@mui/icons-material/Done";
-import MailOutlineIcon  from "@mui/icons-material/MailOutline";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 const MessagesTable = () => {
   const [messages, setMessages] = useState([]);
@@ -25,7 +25,7 @@ const MessagesTable = () => {
     const fetchMessages = async () => {
       try {
         const response = await getMessages();
-        setMessages(response.data.messages);
+        setMessages(response);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
@@ -76,21 +76,21 @@ const MessagesTable = () => {
         </TableHead>
         <TableBody>
           {messages.map((message) => (
-            <TableRow
-              key={message.id}
-            >
+            <TableRow key={message.id}>
               <TableCell>{message.id}</TableCell>
-              <TableCell>{message.name}</TableCell>
+              <TableCell>{message.attributes.name}</TableCell>
               <TableCell>
-                <Tooltip title={message.message} arrow>
-                  {message.message.length > 50
-                    ? `${message.message.substring(0, 50)}...`
-                    : message.message}
+                <Tooltip title={message.attributes.message} arrow>
+                  {message.attributes.message.length > 50
+                    ? `${message.attributes.message.substring(0, 50)}...`
+                    : message.attributes.message}
                 </Tooltip>
               </TableCell>
-              <TableCell>{t(`MessagesPage.${message.gender}`)}</TableCell>
-              <TableCell>{message.country}</TableCell>
-              <TableCell>{formatDate(message.creationDate)}</TableCell>
+              <TableCell>
+                {t(`MessagesPage.${message.attributes.gender}`)}
+              </TableCell>
+              <TableCell>{message.attributes.country}</TableCell>
+              <TableCell>{formatDate(message.attributes.createdAt)}</TableCell>
               <TableCell align="center" sx={{ width: "4%" }}>
                 <IconButton
                   component={Link}
@@ -99,11 +99,11 @@ const MessagesTable = () => {
                 >
                   <ArrowForward />
                 </IconButton>
-                {message.read === "true" ? (
-              <DoneIcon style={{ color: "green" }} />
-            ) : (
-              <MailOutlineIcon style={{ color: "blue" }} />
-            )}
+                {message.attributes.read === true ? (
+                  <DoneIcon style={{ color: "green" }} />
+                ) : (
+                  <MailOutlineIcon style={{ color: "blue" }} />
+                )}
               </TableCell>
             </TableRow>
           ))}

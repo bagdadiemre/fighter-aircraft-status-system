@@ -37,7 +37,7 @@ const UsersAddPage = () => {
     const handleCheckLogin = async () => {
       try {
         const data = await checkLogin();
-        setContext(data.data.user);
+        setContext(data);
       } catch (error) {
         console.error("Check Login failed:", error);
         console.log(context);
@@ -68,10 +68,16 @@ const UsersAddPage = () => {
   };
 
   const handleAddUser = async () => {
-    if (!username || !password || !imageFile) {
+    if (
+      !username ||
+      username.length <= 3 ||
+      !password ||
+      password.length <= 6 ||
+      !imageFile
+    ) {
       // Set the error states
-      setUsernameError(!username);
-      setPasswordError(!password);
+      setUsernameError(!username || username.length <= 3);
+      setPasswordError(!password || password.length <= 6);
       setPhotoError(!imageFile);
       return;
     }
@@ -104,8 +110,8 @@ const UsersAddPage = () => {
 
   return (
     <>
-      {context?.role !== "admin" && <div>{navigate("/unauthorized")}</div>}
-      {context?.role === "admin" && (
+      {context?.roleType !== "admin" && <div>{navigate("/unauthorized")}</div>}
+      {context?.roleType === "admin" && (
         <div>
           <Container
             maxWidth="xs"

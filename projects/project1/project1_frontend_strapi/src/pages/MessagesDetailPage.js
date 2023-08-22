@@ -30,9 +30,9 @@ const MessageDetailsPage = () => {
     const fetchMessageDetails = async () => {
       try {
         const response = await getMessageById(id);
-        setMessage(response.data.message);
+        setMessage(response);
 
-        if (context?.role === "admin" || context?.role === "reader") {
+        if (context?.roleType === "admin" || context?.roleType === "reader") {
           await readMessageById(id);
         }
       } catch (error) {
@@ -50,7 +50,7 @@ const MessageDetailsPage = () => {
     const handleCheckLogin = async () => {
       try {
         const data = await checkLogin();
-        setContext(data.data.user);
+        setContext(data);
       } catch (error) {
         console.error("Check Login failed:", error);
         console.log(context);
@@ -136,23 +136,24 @@ const MessageDetailsPage = () => {
             }}
           ></div>
           <Typography variant="body1" sx={{ margin: "8px 0" }}>
-            <strong>{t("MessagesDetailPage.name")}:</strong> {message.name}
+            <strong>{t("MessagesDetailPage.name")}:</strong>{" "}
+            {message.attributes.name}
           </Typography>
           <Typography variant="body1" sx={{ margin: "8px 0" }}>
             <strong>{t("MessagesDetailPage.message")}:</strong>{" "}
-            {message.message}
+            {message.attributes.message}
           </Typography>
           <Typography variant="body1" sx={{ margin: "8px 0" }}>
             <strong>{t("MessagesDetailPage.gender")}:</strong>{" "}
-            {t(`MessagesDetailPage.${message.gender}`)}
+            {t(`MessagesDetailPage.${message.attributes.gender}`)}
           </Typography>
           <Typography variant="body1" sx={{ margin: "8px 0" }}>
             <strong>{t("MessagesDetailPage.country")}:</strong>{" "}
-            {message.country}
+            {message.attributes.country}
           </Typography>
           <Typography variant="body1" sx={{ margin: "8px 0" }}>
             <strong>{t("MessagesDetailPage.creationDate")}:</strong>{" "}
-            {formatDate(message.creationDate)}
+            {formatDate(message.attributes.createdAt)}
           </Typography>
 
           <Button
@@ -168,7 +169,7 @@ const MessageDetailsPage = () => {
             {t("MessagesDetailPage.homepage")}
           </Button>
 
-          {context?.role === "admin" && (
+          {context?.roleType === "admin" && (
             <>
               <Button
                 variant="outlined"
@@ -195,11 +196,11 @@ const MessageDetailsPage = () => {
                 <DialogContent>
                   <Typography variant="body1">
                     <strong>{t("MessagesDetailPage.name")}:</strong>{" "}
-                    {message.name}
+                    {message.attributes.name}
                   </Typography>
                   <Typography variant="body1" s>
                     <strong>{t("MessagesDetailPage.message")}:</strong>{" "}
-                    {message.message}
+                    {message.attributes.message}
                   </Typography>
                 </DialogContent>
                 <DialogActions>

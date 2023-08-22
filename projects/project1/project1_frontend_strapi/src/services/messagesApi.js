@@ -1,14 +1,17 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5165/api";
+const API_BASE_URL = "http://localhost:1337/api";
 
 export const addNewMessage = async (name, message, gender, country) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/message/add`, {
-      name,
-      message,
-      gender,
-      country,
+    const response = await axios.post(`${API_BASE_URL}/messages`, {
+      data: {
+        name: name,
+        message: message,
+        gender: gender,
+        country: country,
+        read: false,
+      },
     });
     return response.data;
   } catch (error) {
@@ -20,14 +23,17 @@ export const getMessages = async () => {
   try {
     const token = localStorage.getItem("token");
     const response = await axios.get(`${API_BASE_URL}/messages`, {
-      headers: { token },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     throw error.response.data;
   }
 };
 
+//TODO - Implement getPaginatedMessages
 export const getPaginatedMessages = async (
   page,
   rowsPerPage,
@@ -51,6 +57,7 @@ export const getPaginatedMessages = async (
   }
 };
 
+//TODO - Implement getInfiniteScrollMessages
 export const getInfiniteScrollMessages = async (page) => {
   try {
     const token = localStorage.getItem("token");
@@ -58,7 +65,7 @@ export const getInfiniteScrollMessages = async (page) => {
       headers: { token },
       params: { page },
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     throw error.response.data;
   }
@@ -67,10 +74,13 @@ export const getInfiniteScrollMessages = async (page) => {
 export const getMessageById = async (id) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get(`${API_BASE_URL}/message/${id}`, {
-      headers: { token },
+    const response = await axios.get(`${API_BASE_URL}/messages/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
-    return response.data;
+    console.log(response.data.data);
+    return response.data.data;
   } catch (error) {
     throw error.response.data;
   }
@@ -79,29 +89,33 @@ export const getMessageById = async (id) => {
 export const readMessageById = async (id) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.post(
-      `${API_BASE_URL}/message/read/${id}`,
-      null,
+    const response = await axios.put(
+      `${API_BASE_URL}/messages/${id}`,
       {
-        headers: { token },
+        data: {
+          read: true,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
-    return response.data;
+    return response;
   } catch (error) {
-    throw error.response.data;
+    throw error;
   }
 };
 
 export const deleteMessageById = async (id) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.post(
-      `${API_BASE_URL}/message/delete/${id}`,
-      null,
-      {
-        headers: { token },
-      }
-    );
+    const response = await axios.delete(`${API_BASE_URL}/messages/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error.response.data;

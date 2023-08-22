@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5165/api";
+const API_BASE_URL = "http://localhost:1337/api";
 
 export const addNewUserWithReaderRole = async (
   username,
@@ -10,10 +10,20 @@ export const addNewUserWithReaderRole = async (
   try {
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      `${API_BASE_URL}/user/add-reader`,
-      { username, password, base64Photo },
+      `${API_BASE_URL}/users`,
       {
-        headers: { token },
+        username: username,
+        password: password,
+        base64Photo: base64Photo,
+        roleType: "reader",
+        email: "dummy@dummy.com",
+        role: 3,
+        confirmed: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     return response.data;
@@ -27,7 +37,9 @@ export const getUsers = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.get(`${API_BASE_URL}/users`, {
-      headers: { token },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
@@ -38,9 +50,10 @@ export const getUsers = async () => {
 export const getUserById = async (id) => {
   try {
     const token = localStorage.getItem("token");
-
-    const response = await axios.get(`${API_BASE_URL}/user/${id}`, {
-      headers: { token },
+    const response = await axios.get(`${API_BASE_URL}/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
@@ -51,11 +64,17 @@ export const getUserById = async (id) => {
 export const updateUserById = async (id, username, password, base64Photo) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.post(
-      `${API_BASE_URL}/user/update/${id}`,
-      { username, password, base64Photo },
+    const response = await axios.put(
+      `${API_BASE_URL}/users/${id}`,
       {
-        headers: { token },
+        username: username,
+        password: password,
+        base64Photo: base64Photo,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     return response.data;

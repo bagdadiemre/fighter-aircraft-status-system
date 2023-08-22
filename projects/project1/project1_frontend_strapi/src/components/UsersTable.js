@@ -22,7 +22,7 @@ const UsersTable = ({ users }) => {
       component={Paper}
       sx={{
         userSelect: "none",
-        maxWidth: 600,
+        maxWidth: 400,
         margin: "auto",
         mt: 10,
       }}
@@ -31,13 +31,14 @@ const UsersTable = ({ users }) => {
         <TableHead>
           <TableRow>
             <TableCell sx={{ width: "4%" }}>
-              <Typography variant="subtitle1">{t("UsersPage.profile")}</Typography>
+              <Typography variant="subtitle1">
+                {t("UsersPage.profile")}
+              </Typography>
             </TableCell>
-            <TableCell sx={{ width: "37%" }}>
-              <Typography variant="subtitle1">{t("UsersPage.username")}</Typography>
-            </TableCell>
-            <TableCell sx={{ width: "37%" }}>
-              <Typography variant="subtitle1">{t("UsersPage.password")}</Typography>
+            <TableCell sx={{ width: "12%" }}>
+              <Typography variant="subtitle1">
+                {t("UsersPage.username")}
+              </Typography>
             </TableCell>
             <TableCell sx={{ width: "10%" }}>
               <Typography variant="subtitle1">{t("UsersPage.role")}</Typography>
@@ -59,11 +60,8 @@ const UsersTable = ({ users }) => {
                 <Typography variant="subtitle1">{user.username}</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle1">{user.password}</Typography>
-              </TableCell>
-              <TableCell>
                 <Typography variant="subtitle1">
-                  {t(`UsersPage.${user.role}`)}
+                  {t(`UsersPage.${user.roleType}`)}
                 </Typography>
               </TableCell>
               <TableCell>
