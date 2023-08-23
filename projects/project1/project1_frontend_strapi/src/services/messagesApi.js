@@ -33,7 +33,6 @@ export const getMessages = async () => {
   }
 };
 
-//TODO - Implement getPaginatedMessages
 export const getPaginatedMessages = async (
   page,
   rowsPerPage,
@@ -42,15 +41,19 @@ export const getPaginatedMessages = async (
 ) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get(`${API_BASE_URL}/messagesPagination`, {
-      params: {
-        page: page + 1,
-        perPage: rowsPerPage,
-        sortBy,
-        sortOrder,
+    const response = await axios.get(`${API_BASE_URL}/messages`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      headers: { token },
+      params: {
+        pagination: {
+          page: page + 1,
+          pageSize: rowsPerPage,
+        },
+        sort: `${sortBy}:${sortOrder}`,
+      },
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -58,13 +61,21 @@ export const getPaginatedMessages = async (
 };
 
 //TODO - Implement getInfiniteScrollMessages
-export const getInfiniteScrollMessages = async (page) => {
+export const getInfiniteScrollMessages = async (page,pageSize) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get(`${API_BASE_URL}/messagesInfiniteScroll`, {
-      headers: { token },
-      params: { page },
+    const response = await axios.get(`${API_BASE_URL}/messages`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        pagination: {
+          page: page,
+          pageSize: pageSize,
+        },
+      },
     });
+    console.log(response.data.data)
     return response.data.data;
   } catch (error) {
     throw error.response.data;

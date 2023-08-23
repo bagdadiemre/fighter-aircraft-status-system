@@ -20,47 +20,42 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 const MessagesInfiniteScrollTable = () => {
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [hasMorePages, setHasMorePages] = useState(true);
+  const pageSize = 10;
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
 
   const fetchMessages = async () => {
-    if (loading || !hasMorePages) return;
-
-    setLoading(true);
+    setIsLoading(true);
     try {
-      const response = await getInfiniteScrollMessages(page);
-      const newMessages = response.data.messages;
+      const response = await getInfiniteScrollMessages(page, pageSize);
+      const newMessages = response;
       setMessages((prevMessages) => [...prevMessages, ...newMessages]);
-      setHasMorePages(response.data.hasMorePages);
-      setPage((prevPage) => prevPage + 1);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
-    setLoading(false);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     fetchMessages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page]);
 
   const handleScroll = () => {
-    const scrollPosition = window.innerHeight + window.scrollY;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    if (scrollPosition >= documentHeight - 100 && !loading) {
-      fetchMessages();
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      // User has reached the bottom of the page, load more items
+      setPage((prevPage) => prevPage + 1);
     }
   };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const formatDate = (dateString) => {
     const options = {
@@ -104,23 +99,21 @@ const MessagesInfiniteScrollTable = () => {
         </TableHead>
         <TableBody>
           {messages.map((message) => (
-            <TableRow
-              key={message.id}
-            >
+            <TableRow key={message.id}>
               <TableCell>{message.id}</TableCell>
-              <TableCell>{message.name}</TableCell>
+              <TableCell>{message.attributes.name}</TableCell>
               <TableCell>
                 <Tooltip title={message.message} arrow>
-                  {message.message.length > 50
-                    ? `${message.message.substring(0, 50)}...`
-                    : message.message}
+                  {message.attributes.message.length > 50
+                    ? `${message.attributes.message.substring(0, 50)}...`
+                    : message.attributes.message}
                 </Tooltip>
               </TableCell>
               <TableCell>
-                {t(`MessagesInfiniteScroll.${message.gender}`)}
+                {t(`MessagesInfiniteScroll.${message.attributes.gender}`)}
               </TableCell>
-              <TableCell>{message.country}</TableCell>
-              <TableCell>{formatDate(message.creationDate)}</TableCell>
+              <TableCell>{message.attributes.country}</TableCell>
+              <TableCell>{formatDate(message.attributes.createdAt)}</TableCell>
               <TableCell align="center" sx={{ width: "4%" }}>
                 <IconButton
                   component={Link}
@@ -129,7 +122,7 @@ const MessagesInfiniteScrollTable = () => {
                 >
                   <ArrowForward />
                 </IconButton>
-                {message.read === "true" ? (
+                {message.attributes.read === "true" ? (
                   <DoneIcon style={{ color: "green" }} />
                 ) : (
                   <MailOutlineIcon style={{ color: "blue" }} />
@@ -139,7 +132,7 @@ const MessagesInfiniteScrollTable = () => {
           ))}
         </TableBody>
       </Table>
-      {loading && (
+      {isLoading && (
         <div
           style={{ display: "flex", justifyContent: "center", padding: "16px" }}
         >

@@ -23,13 +23,14 @@ const MessagePaginatedTable = () => {
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [sortBy, setSortBy] = useState("creationDate");
+  const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("asc");
   const [totalCount, setTotalCount] = useState(0);
   const { t } = useTranslation();
 
   useEffect(() => {
     fetchMessages();
+    console.log("useEffect Worked FetchMessages");
   }, [page, rowsPerPage, sortBy, sortOrder]);
 
   const fetchMessages = async () => {
@@ -40,8 +41,8 @@ const MessagePaginatedTable = () => {
         sortBy,
         sortOrder
       );
-      setMessages(messagesData.data.messages);
-      setTotalCount(messagesData.data.totalCount);
+      setMessages(messagesData.data);
+      setTotalCount(messagesData.meta.pagination.total);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -133,19 +134,19 @@ const MessagePaginatedTable = () => {
           {messages.map((message) => (
             <TableRow key={message.id}>
               <TableCell>{message.id}</TableCell>
-              <TableCell>{message.name}</TableCell>
+              <TableCell>{message.attributes.name}</TableCell>
               <TableCell>
-                <Tooltip title={message.message} arrow>
-                  {message.message.length > 50
-                    ? `${message.message.substring(0, 50)}...`
-                    : message.message}
+                <Tooltip title={message.attributes.message} arrow>
+                  {message.attributes.message.length > 50
+                    ? `${message.attributes.message.substring(0, 50)}...`
+                    : message.attributes.message}
                 </Tooltip>
               </TableCell>
               <TableCell>
-                {t(`MessagesPaginatedPage.${message.gender}`)}
+                {t(`MessagesPaginatedPage.${message.attributes.gender}`)}
               </TableCell>
-              <TableCell>{message.country}</TableCell>
-              <TableCell>{formatDate(message.creationDate)}</TableCell>
+              <TableCell>{message.attributes.country}</TableCell>
+              <TableCell>{formatDate(message.attributes.createdAt)}</TableCell>
               <TableCell align="center" sx={{ width: "4%" }}>
                 <IconButton
                   component={Link}
@@ -167,7 +168,7 @@ const MessagePaginatedTable = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 20, 100]}
         component="div"
-        count={totalCount} // You need to provide the total count of messages
+        count={totalCount}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
