@@ -53,10 +53,7 @@ The goal of this project is to create a front-end interface for the Fighter Airc
 - Electron
 
 ## Sample Output
-
-![Project Demo](https://github.com/bagdadiemre/fighter-aircraft-status-system/assets/54630643/e2fa8d3f-f51a-44e8-a6db-d0ac27616d77)
-
-For a more detailed demonstration, check the [sample output video](./backend/sample-output/fighter-aircraft-sample-output.webm).
+For a more detailed demonstration, check the [sample expected output video](./backend/sample-output/fighter-aircraft-sample-output.webm).
 
 ## Contributing
 Contributions are welcome! If you find any issues or have suggestions, feel free to submit a pull request or open an issue.
