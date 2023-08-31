@@ -55,7 +55,7 @@ The goal of this project is to create a front-end interface for the Fighter Airc
 ## Sample Output
 ![Project Demo](./fighter-aircraft-sample-output.gif)
 
-For a more detailed demonstration, check the [sample output video](./fighter-aircraft-sample-output.webm).
+For a more detailed demonstration, check the [sample output video](./backend/sample-output/fighter-aircraft-sample-output.webm).
 
 ## Contributing
 Contributions are welcome! If you find any issues or have suggestions, feel free to submit a pull request or open an issue.
